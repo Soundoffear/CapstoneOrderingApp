@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".HomeActivity">
+
+    <ImageView
+        android:id="@+id/home_screen_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="64dp"
+        android:contentDescription="@string/restaurant_logo"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/home_screen_e-mail_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="200dp"
+        tools:layout_width="200dp" />
+
+    <TextView
+        android:id="@+id/home_screen_e-mail_login"
+        style="@style/HomeScreenStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/home_user_email"
+        app:layout_constraintBottom_toTopOf="@+id/home_screen_e-mail_login_input"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_logo" />
+
+    <EditText
+        android:id="@+id/home_screen_e-mail_login_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:hint="@string/please_enter_e_mail_address"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/home_screen_password_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_e-mail_login" />
+
+    <TextView
+        android:id="@+id/home_screen_password_login"
+        style="@style/HomeScreenStyleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/password"
+        app:layout_constraintBottom_toTopOf="@+id/home_screen_password_login_input"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_e-mail_login_input" />
+
+    <EditText
+        android:id="@+id/home_screen_password_login_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:hint="@string/enter_password"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_password_login" />
+
+    <Button
+        android:id="@+id/home_screen_login_button"
+        style="@style/HomeScreenButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_password_login_input" />
+
+    <Button
+        android:id="@+id/home_screen_sign_up_button"
+        style="@style/HomeScreenButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/signup"
+        app:layout_constraintRight_toLeftOf="@+id/home_screen_exit_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_login_button" />
+
+    <Button
+        android:id="@+id/home_screen_exit_button"
+        style="@style/HomeScreenButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/exit"
+        app:layout_constraintLeft_toRightOf="@+id/home_screen_sign_up_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_login_button" />
+
+</android.support.constraint.ConstraintLayout>

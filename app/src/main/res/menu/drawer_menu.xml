@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/main_screen"
+            android:title="@string/main_screen" />
+        <item
+            android:id="@+id/coupons_and_promo"
+            android:title="@string/coupons_and_promotions" />
+        <item
+            android:id="@+id/favorites"
+            android:title="@string/favorites"/>
+        <item
+            android:id="@+id/order_history"
+            android:title="@string/order_history" />
+        <item
+            android:id="@+id/redeem_rewards"
+            android:title="@string/redeem_rewards"/>
+        <item
+            android:id="@+id/delivery_address"
+            android:title="@string/delivery_address"/>
+        <item
+            android:id="@+id/order_status"
+            android:title="@string/order_status"/>
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings"/>
+    </group>
+</menu>

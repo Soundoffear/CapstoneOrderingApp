@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "345432600209",
+    "firebase_url": "https://orderingapp-aa10b.firebaseio.com",
+    "project_id": "orderingapp-aa10b",
+    "storage_bucket": "orderingapp-aa10b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345432600209:android:793aaea3e4255e30",
+        "android_client_info": {
+          "package_name": "com.ejoapps.m2d2_sub.orderingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345432600209-l03o5fqariaf9nd2n63inbf8ilpd0phf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ejoapps.m2d2_sub.orderingapp",
+            "certificate_hash": "087be9e77e61e6b2ea4f2d920c769fc00892701d"
+          }
+        },
+        {
+          "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3ZpHB-rCuAgdW7mGbP96hCiSv3S421NM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345432600209:android:72338979aea99f6c",
+        "android_client_info": {
+          "package_name": "com.example.soundoffear.capstoneorderingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345432600209-ocsro03mqdkd4ikqnt1rats18uqrn8j8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.soundoffear.capstoneorderingapp",
+            "certificate_hash": "087be9e77e61e6b2ea4f2d920c769fc00892701d"
+          }
+        },
+        {
+          "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3ZpHB-rCuAgdW7mGbP96hCiSv3S421NM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345432600209-qv2mpipmqeg5vunbku1gqjq5boga4k4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,86 @@
+package com.example.soundoffear.capstoneorderingapp.adapters;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.example.soundoffear.capstoneorderingapp.R;
+import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichAdapter_RV.FinalSandwich_ViewHolder> {
+
+    private Context fContext;
+    private List<FinalSandwichModel> finalSandwichModelList;
+
+    public FinalSandwichAdapter_RV(Context fContext, List<FinalSandwichModel> finalSandwichModelList) {
+        this.fContext = fContext;
+        this.finalSandwichModelList = finalSandwichModelList;
+    }
+
+    @NonNull
+    @Override
+    public FinalSandwich_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(fContext).inflate(R.layout.item_order_summary, parent, false);
+
+        return new FinalSandwich_ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull FinalSandwich_ViewHolder holder, int position) {
+        FinalSandwichModel finalSandwichModel = finalSandwichModelList.get(position);
+        holder.item_os_carrier.setText(finalSandwichModel.getCarrier());
+        holder.item_os_sandwich_name.setText(finalSandwichModel.getSandwich());
+        holder.item_os_bread.setText(finalSandwichModel.getBread());
+        holder.item_os_vegetable.setText(brokenDownData(finalSandwichModel.getVegetables()));
+        holder.item_os_sauces.setText(finalSandwichModel.getSauces());
+        holder.item_os_paid_addons.setText(finalSandwichModel.getPaidAddOns());
+        holder.item_os_final_price.setText(finalSandwichModel.getFinalPrice());
+
+        //TODO data needs to be broke down before it can be set into TextViews
+
+        //TODO need to work on buttons
+
+        //TODO need to add expandable FAB
+    }
+
+    @Override
+    public int getItemCount() {
+        return finalSandwichModelList.size();
+    }
+
+    class FinalSandwich_ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_os_carrier) TextView item_os_carrier;
+        @BindView(R.id.item_os_name) TextView item_os_sandwich_name;
+        @BindView(R.id.item_os_bread_output) TextView item_os_bread;
+        @BindView(R.id.item_os_vegetable_output) TextView item_os_vegetable;
+        @BindView(R.id.item_os_sauces_output) TextView item_os_sauces;
+        @BindView(R.id.item_os_paid_addons_output) TextView item_os_paid_addons;
+        @BindView(R.id.item_os_final_price) TextView item_os_final_price;
+
+        public FinalSandwich_ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public String brokenDownData(String data) {
+        String[] brokenData1 = data.split("_");
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i =0; i < brokenData1.length;i++) {
+            stringBuilder.append(brokenData1[i]).append(" ");
+        }
+
+        return stringBuilder.toString();
+    }
+
+}
