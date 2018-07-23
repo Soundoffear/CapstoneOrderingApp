@@ -19,6 +19,12 @@ public class HistoryModel {
     private String sauces;
     private String vegetables;
 
+    //label constructor
+    public HistoryModel(int type, String name) {
+        this.type = type;
+        this.name = name;
+    }
+
     //drinks constructor
     public HistoryModel(int type, String name, String price, String quantity) {
         this.type = type;
@@ -27,6 +33,7 @@ public class HistoryModel {
         this.quantity = quantity;
     }
 
+    //sandwich constructor
     public HistoryModel(int type, String name, String price, String carrier, String bread, String paidAddons, String sauces, String vegetables) {
         this.type = type;
         this.name = name;
