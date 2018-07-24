@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -121,6 +122,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
         order_summary_send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("SENDING DATA", "Sending data");
                 String orderNumber = String.valueOf(new Date(System.currentTimeMillis()));
                 if(drinksModelList.size() > 1) {
                     for(int i = 0; i < drinksModelList.size();i++) {

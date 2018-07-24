@@ -67,18 +67,15 @@ public class OrderHistoryFragment extends Fragment {
                 Map<String, Object> ordersNumbers = (Map<String, Object>) dataSnapshot.getValue();
 
                 for(Map.Entry<String, Object> order: ordersNumbers.entrySet()) {
-                    //Log.d("HISTORY TEST", order.getKey());
                     historyModel = new HistoryModel(HistoryModel.LABEL_TYPE, order.getKey());
                     historyModelList.add(historyModel);
                     Map<String, Object> orderItems = (Map<String, Object>) order.getValue();
                     for(Map.Entry<String, Object> orderItem: orderItems.entrySet()) {
                         String item = orderItem.getKey();
-                        //Log.d("TEST ITEMS", item);
-                        historyModel = new HistoryModel(HistoryModel.LABEL_TYPE, orderItem.getKey());
-                        historyModelList.add(historyModel);
+                        //historyModel = new HistoryModel(HistoryModel.LABEL_TYPE, ((Map<String, String>)orderItem.getValue()).get("name"));
+                        //historyModelList.add(historyModel);
                         if(item.contains("Drink")) {
                             Map<String, String> drinkItem = (Map<String, String>) orderItem.getValue();
-                            //Log.d("Drink Details I", drinkItem.get("name") + " " + drinkItem.get("price") + " " + drinkItem.get("value"));
                             historyModel = new HistoryModel(HistoryModel.DRINK_TYPE, drinkItem.get("name"), drinkItem.get("price"), drinkItem.get("value"));
                             historyModelList.add(historyModel);
                         }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.models.HistoryModel;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,14 +59,30 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_name.setText(historyModel.getName());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_carrier.setText(historyModel.getCarrier());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_bread_output.setText(historyModel.getBread());
-                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_final_price.setText(historyModel.getPrice());
-                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_paid_addons_output.setText(historyModel.getPaidAddons());
-                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_sauces_output.setText(historyModel.getSauces());
-                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_vegetable_output.setText(historyModel.getVegetables());
+                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_final_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
+                    StringBuilder paidStringBuilder = new StringBuilder();
+                    String[] splittedPaid = historyModel.getPaidAddons().split("-");
+                    for (String aSplittedPaid : splittedPaid) {
+                        String[] splittedAddOn = aSplittedPaid.split("_");
+                        paidStringBuilder.append(splittedAddOn[0]).append(" ").append("x").append(" ").append(splittedAddOn[1]).append("\n");
+                    }
+                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_paid_addons_output.setText(paidStringBuilder.toString());
+                    StringBuilder saucesSB = new StringBuilder();
+                    String[] sauces = historyModel.getSauces().split("_");
+                    for(String sauce: sauces) {
+                        saucesSB.append(sauce).append(" ");
+                    }
+                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_sauces_output.setText(saucesSB.toString());
+                    StringBuilder vegesSB = new StringBuilder();
+                    String[] vegetables = historyModel.getVegetables().split("_");
+                    for(String vegetable: vegetables) {
+                        vegesSB.append(vegetable).append(" ");
+                    }
+                    ((OrderHistorySandwiches_ViewHolder) holder).item_os_vegetable_output.setText(vegesSB.toString());
                     break;
                 case HistoryModel.DRINK_TYPE:
                     ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_name.setText(historyModel.getName());
-                    ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_price.setText(historyModel.getPrice());
+                    ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
                     ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_value.setText(historyModel.getQuantity());
                     break;
             }

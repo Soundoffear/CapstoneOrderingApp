@@ -4,16 +4,16 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background">
+    android:background="@drawable/border_layout"
+    android:padding="4dp"
+    android:layout_margin="1dp">
 
     <TextView
         android:id="@+id/ids_drink_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="DRINK DRINK"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:padding="4dp"
+        style="@style/normal_text_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,9 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="0"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:padding="4dp"
+        style="@style/normal_text_style"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/ids_drink_name"/>
@@ -35,21 +33,19 @@
         android:id="@+id/ids_drink_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:padding="4dp"
+        style="@style/normal_text_style"
         tools:text="0.00"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/ids_drink_currency"/>
+        app:layout_constraintRight_toLeftOf="@+id/ids_drink_currency"
+        android:layout_marginRight="4dp"
+        android:layout_marginEnd="4dp"/>
 
     <TextView
         android:id="@+id/ids_drink_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:padding="4dp"
+        style="@style/normal_text_style"
         android:text="@string/pln"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

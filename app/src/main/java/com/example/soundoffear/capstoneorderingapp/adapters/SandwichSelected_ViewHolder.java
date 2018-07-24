@@ -24,7 +24,7 @@ public class SandwichSelected_ViewHolder extends RecyclerView.ViewHolder impleme
     Context mContext;
 
     @BindView(R.id.sandwich_item_checkbox)
-    CheckBox sandwich_checkbox;
+    TextView sandwich_checkbox;
     @BindView(R.id.sandwich_item_description_tv)
     TextView sandwich_description_tv;
     @BindView(R.id.sandwich_item_price_currency_tv)

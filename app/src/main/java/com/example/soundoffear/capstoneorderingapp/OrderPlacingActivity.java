@@ -276,14 +276,8 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     ft.commit();
                 }
                 if(loadedFragment instanceof PaidAddsFragment) {
-                    Log.d("Carrier", carrierChosen);
-                    Log.d("Sandwich Chosen", sandwichChosen);
-                    Log.d("Vegetable Chosen", vegetableChosen);
-                    Log.d("Sauce Chosen", sauceChosen);
-                    Log.d("Bread Type", breadChosen);
                     PaidAddsFragment paidAddsFragment = (PaidAddsFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     paidAddsChosen = paidAddsFragment.getPaidAddsData();
-                    Log.d("Paid Adds Data", paidAddsChosen);
 
                     //Calculate final total price for sandwich
                     double d_sandwichPrice = Double.parseDouble(sandwichPriceChosen);
@@ -303,8 +297,6 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     for(int i = 0; i < fullySplitPaidArray.length;i++) {
                         final_sandwichPrice = final_sandwichPrice + Double.parseDouble(fullySplitPaidArray[i][2]);
                     }
-
-                    Log.d("FINAL PRICE", "TEST : " + final_sandwichPrice);
 
                     FinalSandwichModel finalSandwichModel;
 
