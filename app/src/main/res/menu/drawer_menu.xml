@@ -18,7 +18,7 @@
             android:title="@string/redeem_rewards"/>
         <item
             android:id="@+id/delivery_address"
-            android:title="@string/delivery_address"/>
+            android:title="@string/user_data"/>
         <item
             android:id="@+id/order_status"
             android:title="@string/order_status"/>

@@ -12,7 +12,7 @@
     <string name="favorites">Favorites</string>
     <string name="order_history">Order History</string>
     <string name="redeem_rewards">Redeem Rewards</string>
-    <string name="delivery_address">Delivery Address</string>
+    <string name="user_data">User Data</string>
     <string name="order_status">Order Status</string>
     <string name="settings">Settings</string>
     <string name="main_screen">Main Screen</string>
@@ -34,4 +34,15 @@
     <string name="increase_number_of_drinks">increase number of drinks</string>
     <string name="pln">PLN</string>
     <string name="zero_pln">0.00</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="e_mail">E-mail</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="street">Street</string>
+    <string name="number">Number</string>
+    <string name="city">City</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="edit_data">Edit Data</string>
 </resources>
