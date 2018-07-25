@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="4dp"
     android:layout_margin="1dp"
-    android:background="@drawable/border_layout"
-    >
+    android:background="@drawable/border_layout">
 
     <TextView
         android:id="@+id/item_os_carrier"
@@ -83,9 +82,8 @@
         android:layout_height="wrap_content"
         android:text="@string/sauces"
         style="@style/normal_text_style"
-        app:layout_constraintBottom_toBottomOf="@+id/item_os_sauces_output"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_os_sauces_output" />
+        app:layout_constraintTop_toBottomOf="@+id/item_os_vegetable_output" />
 
     <TextView
         android:id="@+id/item_os_sauces_output"
@@ -96,7 +94,7 @@
         style="@style/normal_text_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_os_vegetable_output"
+        app:layout_constraintTop_toTopOf="@+id/item_os_sauces_label"
         tools:text="Sauces Sauces Sauces" />
 
     <TextView
@@ -105,9 +103,8 @@
         android:layout_height="wrap_content"
         android:text="@string/paid_addons"
         style="@style/normal_text_style"
-        app:layout_constraintBottom_toBottomOf="@+id/item_os_paid_addons_output"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_os_paid_addons_output" />
+        app:layout_constraintTop_toBottomOf="@+id/item_os_sauces_output" />
 
     <TextView
         android:id="@+id/item_os_paid_addons_output"
@@ -118,8 +115,8 @@
         style="@style/normal_text_style"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_os_sauces_output"
-        tools:text="Paid AddOns Paid AddOns" />
+        app:layout_constraintTop_toTopOf="@+id/item_os_paid_addons_label"
+        tools:text="Paid AddOns Paid AddOns Paid AddOns" />
 
     <TextView
         android:id="@+id/item_os_final_price"

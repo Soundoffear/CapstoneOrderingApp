@@ -27,7 +27,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity android:name=".OrderSummaryActivity" />
-        <activity android:name=".OrderDrinksActivity"></activity>
+        <activity android:name=".OrderDrinksActivity" />
     </application>
 
 </manifest>

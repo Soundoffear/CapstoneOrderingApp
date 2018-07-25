@@ -40,16 +40,31 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
         holder.item_os_carrier.setText(finalSandwichModel.getCarrier());
         holder.item_os_sandwich_name.setText(finalSandwichModel.getSandwich());
         holder.item_os_bread.setText(finalSandwichModel.getBread());
-        holder.item_os_vegetable.setText(brokenDownData(finalSandwichModel.getVegetables()));
-        holder.item_os_sauces.setText(finalSandwichModel.getSauces());
-        holder.item_os_paid_addons.setText(finalSandwichModel.getPaidAddOns());
+        String[] vegetables = finalSandwichModel.getVegetables().split("_");
+        StringBuilder vegesSpace = new StringBuilder();
+        for(String vegetable: vegetables) {
+            vegesSpace.append(vegetable).append(" ");
+        }
+        holder.item_os_vegetable.setText(brokenDownData(vegesSpace.toString()));
+        String[] sauces = finalSandwichModel.getSauces().split("_");
+        StringBuilder saucesSpace = new StringBuilder();
+        for(String sauce: sauces) {
+            saucesSpace.append(sauce).append(" ");
+        }
+        holder.item_os_sauces.setText(saucesSpace.toString());
+        String[] paidSplitted = finalSandwichModel.getPaidAddOns().split("-");
+        StringBuilder paidBuilder = new StringBuilder();
+        for(String paidAddOn: paidSplitted) {
+            String[] paidAddOnSplitted = paidAddOn.split("_");
+            paidBuilder.append(paidAddOnSplitted[0]).append(" ").append("x").append(" ").append(paidAddOnSplitted[1]).append(" ").append("-").append(" ").append(paidAddOnSplitted[2]).append("\n");
+        }
+        holder.item_os_paid_addons.setText(paidBuilder);
         holder.item_os_final_price.setText(finalSandwichModel.getFinalPrice());
 
         //TODO data needs to be broke down before it can be set into TextViews
 
         //TODO need to work on buttons
 
-        //TODO need to add expandable FAB
     }
 
     @Override

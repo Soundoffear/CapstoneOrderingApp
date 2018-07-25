@@ -10,24 +10,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
+import com.example.soundoffear.capstoneorderingapp.interfaces.OnCarrierSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.interfaces.SelectionListener;
+import com.example.soundoffear.capstoneorderingapp.models.CarrierModel;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarrierAdapter_RV.SandwichCarrier_ViewHolder> {
+public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarrier_ViewHolder> implements OnCarrierSelectedListener {
 
     // TODO needs to be redone so it can be single selectable
     private Context mContext;
-    private List<String> carriersList;
-    private SelectionListener onCarrierSelectedListener;
+    private List<CarrierModel> carriersList;
+    private OnCarrierSelectedListener onCarrierSelectedListener;
+    private boolean isMultiSelectable;
 
-    public SandwichCarrierAdapter_RV(Context mContext, List<String> carriersList, SelectionListener carrierSelectionListener) {
+    public SandwichCarrierAdapter_RV(Context mContext, List<CarrierModel> carriersList, OnCarrierSelectedListener carrierSelectionListener, boolean isMultiSelectable) {
         this.mContext = mContext;
         this.carriersList = carriersList;
-        onCarrierSelectedListener = carrierSelectionListener;
+        this.onCarrierSelectedListener = carrierSelectionListener;
+        this.isMultiSelectable = isMultiSelectable;
     }
 
     @NonNull
@@ -35,13 +39,15 @@ public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarr
     public SandwichCarrier_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View carriersView = LayoutInflater.from(mContext).inflate(R.layout.item_carrier, parent, false);
 
-        return new SandwichCarrier_ViewHolder(carriersView);
+        return new SandwichCarrier_ViewHolder(carriersView, this, mContext);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SandwichCarrier_ViewHolder holder, final int position) {
-        holder.carrier_tv.setText(carriersList.get(position));
+        holder.carrier_tv.setText(carriersList.get(position).getCarrierName());
 
+        holder.carrierModel = carriersList.get(position);
+        holder.setSelected(holder.carrierModel.isSelectedCarrier());
 
     }
 
@@ -51,31 +57,27 @@ public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarr
     }
 
 
-    class SandwichCarrier_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        @BindView(R.id.carrier_tv)
-        TextView carrier_tv;
-        @BindView(R.id.carrier_layout)
-        ConstraintLayout carrier_layout;
-
-        SandwichCarrier_ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            int row_index = getLayoutPosition();
-
-            if(row_index == getLayoutPosition()) {
-                carrier_layout.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
-            } else if(row_index != getLayoutPosition()) {
-                carrier_layout.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-            }
-
-            onCarrierSelectedListener.onCarrierSelectedListener(getLayoutPosition(), carriersList.get(getLayoutPosition()));
+    @Override
+    public int getItemViewType(int position) {
+        if(isMultiSelectable) {
+            return SandwichCarrier_ViewHolder.MULTISELECT;
+        } else {
+            return SandwichCarrier_ViewHolder.SINGLESELECT;
         }
     }
 
+    @Override
+    public void onSelectedCarrier(CarrierModel carrierModel) {
+        if(!isMultiSelectable) {
+            for(CarrierModel carrier: carriersList) {
+                if(!carrier.equals(carrierModel) && carrier.isSelectedCarrier()) {
+                    carrier.setSelectedCarrier(false);
+                } else if(carrier.equals(carrierModel) && carrierModel.isSelectedCarrier()) {
+                    carrier.setSelectedCarrier(true);
+                }
+            }
+            notifyDataSetChanged();
+        }
+        onCarrierSelectedListener.onSelectedCarrier(carrierModel);
+    }
 }
