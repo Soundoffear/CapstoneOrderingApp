@@ -12,97 +12,143 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/order_summary_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/order_summary_toolbar"
+        android:background="@color/background"
         app:layout_constraintBottom_toTopOf="@id/order_summary_drinks_recyclerView"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@color/background"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_summary_toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/order_summary_drinks_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/background"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/order_summary_linear_layout"
-        app:layout_constraintTop_toBottomOf="@+id/order_summary_recyclerView"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_summary_recyclerView" />
+
+    <LinearLayout
+        android:id="@+id/order_summary_price_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary_linear_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/order_summary_total_price_tv"
+            style="@style/normal_text_style"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:padding="4dp"
+            android:text="@string/total_price"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/order_summary_total_price_output"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/normal_text_style"
+            android:textSize="20sp"
+            android:padding="4dp"
+            tools:text="0.00"/>
+
+        <TextView
+            android:id="@+id/order_summary_total_price_currency"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/pln"
+            style="@style/normal_text_style"
+            android:textSize="20sp"
+            android:padding="4dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/order_summary_linear_layout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintRight_toRightOf="parent">
+
         <Button
             android:id="@+id/order_summary_cancel_order"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel_order"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:text="@string/cancel_order"/>
+            android:textSize="20sp" />
+
         <Button
             android:id="@+id/order_summary_send_order"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/send_order"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:text="@string/send_order"/>
+            android:textSize="20sp" />
     </LinearLayout>
+
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/order_summary_fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="56dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
-        fab:fab_labelsPosition="left"
-        fab:fab_labelStyle="@style/menu_labels_style">
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary_linear_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/order_summary_button_add_sandwich"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccent"
             fab:fab_size="mini"
-            fab:fab_title="Add Sandwich"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_title="Add Sandwich" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/order_summary_button_add_drink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccent"
             fab:fab_size="mini"
-            fab:fab_title="Add Drinks"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_title="Add Drinks" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/order_summary_button_add_sides"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/order_summary_button_add_sides"
             fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccent"
             fab:fab_size="mini"
-            fab:fab_title="Add Sides"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_title="Add Sides" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

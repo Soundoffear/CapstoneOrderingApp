@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 
 public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarrier_ViewHolder> implements OnCarrierSelectedListener {
 
-    // TODO needs to be redone so it can be single selectable
     private Context mContext;
     private List<CarrierModel> carriersList;
     private OnCarrierSelectedListener onCarrierSelectedListener;

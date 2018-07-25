@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.adapters.DrinksAdapter_RV;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +39,8 @@ public class OrderSummaryActivity extends AppCompatActivity {
     RecyclerView order_summary_recyclerView;
     @BindView(R.id.order_summary_drinks_recyclerView)
     RecyclerView order_summary_drinks_recyclerView;
-
-    private String fbURL = "https://orderingapp-aa10b.firebaseio.com/users/";
+    @BindView(R.id.order_summary_total_price_output)
+    TextView order_summary_total_price_output;
 
     @BindView(R.id.order_summary_fabMenu) FloatingActionsMenu floatingActionsMenu;
     @BindView(R.id.order_summary_button_add_drink) FloatingActionButton fab_add_drink;
@@ -53,6 +55,8 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     private int countDrinks = 0;
     private int countSubs = 0;
+
+    private double countTotalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
             order_summary_recyclerView.setLayoutManager(linearLayoutManager);
             FinalSandwichAdapter_RV finalSandwichAdapter_rv = new FinalSandwichAdapter_RV(this, finalSandwichModelList);
             order_summary_recyclerView.setAdapter(finalSandwichAdapter_rv);
+            for(FinalSandwichModel finalSandwichModel: finalSandwichModelList) {
+                countTotalPrice = countTotalPrice+Double.parseDouble(finalSandwichModel.getFinalPrice());
+            }
         } else {
             order_summary_recyclerView.setVisibility(View.GONE);
         }
@@ -87,9 +94,14 @@ public class OrderSummaryActivity extends AppCompatActivity {
             order_summary_drinks_recyclerView.setLayoutManager(linearLayoutManager1);
             DrinksOrderSummaryAdapter_RV drinksOrderSummaryAdapter_rv = new DrinksOrderSummaryAdapter_RV(this, drinksModelList);
             order_summary_drinks_recyclerView.setAdapter(drinksOrderSummaryAdapter_rv);
+            for(DrinksModel drinksModel: drinksModelList) {
+                countTotalPrice = countTotalPrice + Double.parseDouble(drinksModel.getPrice());
+            }
         } else {
             order_summary_drinks_recyclerView.setVisibility(View.GONE);
         }
+
+        order_summary_total_price_output.setText(new DecimalFormat("0.00").format(countTotalPrice));
 
         fab_add_drink.setIconDrawable(getApplicationContext().getResources().getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
         fab_add_drink.setOnClickListener(new View.OnClickListener() {

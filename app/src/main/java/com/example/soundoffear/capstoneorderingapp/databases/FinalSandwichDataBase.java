@@ -100,5 +100,4 @@ public class FinalSandwichDataBase extends SQLiteOpenHelper {
         liteDatabase.delete(tableName, null,null);
         liteDatabase.close();
     }
-    //TODO delete table data and set it to delete at home screen
 }

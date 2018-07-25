@@ -61,8 +61,6 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
         holder.item_os_paid_addons.setText(paidBuilder);
         holder.item_os_final_price.setText(finalSandwichModel.getFinalPrice());
 
-        //TODO data needs to be broke down before it can be set into TextViews
-
         //TODO need to work on buttons
 
     }
