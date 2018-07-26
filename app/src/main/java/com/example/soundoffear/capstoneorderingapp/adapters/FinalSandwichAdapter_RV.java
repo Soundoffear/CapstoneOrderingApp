@@ -56,12 +56,14 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
         StringBuilder paidBuilder = new StringBuilder();
         for(String paidAddOn: paidSplitted) {
             String[] paidAddOnSplitted = paidAddOn.split("_");
-            paidBuilder.append(paidAddOnSplitted[0]).append(" ").append("x").append(" ").append(paidAddOnSplitted[1]).append(" ").append("-").append(" ").append(paidAddOnSplitted[2]).append("\n");
+            if(paidAddOnSplitted.length > 1) {
+                paidBuilder.append(paidAddOnSplitted[0]).append(" ").append("x").append(" ").append(paidAddOnSplitted[1]).append(" ").append("-").append(" ").append(paidAddOnSplitted[2]).append("\n");
+            } else {
+                paidBuilder.append("brak");
+            }
         }
         holder.item_os_paid_addons.setText(paidBuilder);
         holder.item_os_final_price.setText(finalSandwichModel.getFinalPrice());
-
-        //TODO need to work on buttons
 
     }
 
@@ -80,17 +82,17 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
         @BindView(R.id.item_os_paid_addons_output) TextView item_os_paid_addons;
         @BindView(R.id.item_os_final_price) TextView item_os_final_price;
 
-        public FinalSandwich_ViewHolder(View itemView) {
+        FinalSandwich_ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
 
-    public String brokenDownData(String data) {
+    private String brokenDownData(String data) {
         String[] brokenData1 = data.split("_");
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i =0; i < brokenData1.length;i++) {
-            stringBuilder.append(brokenData1[i]).append(" ");
+        for (String aBrokenData1 : brokenData1) {
+            stringBuilder.append(aBrokenData1).append(" ");
         }
 
         return stringBuilder.toString();

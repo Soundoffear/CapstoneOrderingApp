@@ -2,6 +2,9 @@ package com.example.soundoffear.capstoneorderingapp.models;
 
 public class FinalSandwichModel {
 
+    //required only by FavoritesFragment
+    private String favNumber;
+
     private String carrier;
     private String sandwich;
     private String bread;
@@ -9,6 +12,17 @@ public class FinalSandwichModel {
     private String sauces;
     private String paidAddOns;
     private String finalPrice;
+
+    public FinalSandwichModel(String favNumber, String carrier, String sandwich, String bread, String vegetables, String sauces, String paidAddOns, String finalPrice) {
+        this.favNumber = favNumber;
+        this.carrier = carrier;
+        this.sandwich = sandwich;
+        this.bread = bread;
+        this.vegetables = vegetables;
+        this.sauces = sauces;
+        this.paidAddOns = paidAddOns;
+        this.finalPrice = finalPrice;
+    }
 
     public FinalSandwichModel(String carrier, String sandwich, String bread, String vegetables, String sauces, String paidAddOns, String finalPrice) {
         this.carrier = carrier;
@@ -18,6 +32,10 @@ public class FinalSandwichModel {
         this.sauces = sauces;
         this.paidAddOns = paidAddOns;
         this.finalPrice = finalPrice;
+    }
+
+    public String getFavNumber() {
+        return favNumber;
     }
 
     public String getCarrier() {

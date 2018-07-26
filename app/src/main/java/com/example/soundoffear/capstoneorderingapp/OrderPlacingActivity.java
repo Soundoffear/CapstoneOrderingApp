@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
+import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.MainPageFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.OrderTypesFragment;
 import com.example.soundoffear.capstoneorderingapp.models.BreadModel;
@@ -109,7 +110,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(isOrderingAdditionalSandwich) {
+        if (isOrderingAdditionalSandwich || FavoritesFragment.isAddingFav) {
             initializeFragment = new CarrierChooserFragment();
         } else {
             initializeFragment = new OrderTypesFragment();
@@ -130,7 +131,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 Map<String, Object> sandwichData = (Map<String, Object>) dataSnapshot.child("s_name_desc").getValue();
 
                 assert sandwichData != null;
-                for(Map.Entry<String, Object> data: sandwichData.entrySet()) {
+                for (Map.Entry<String, Object> data : sandwichData.entrySet()) {
                     String sandwichName = data.getKey();
                     String sandwichValue = (String) data.getValue();
                     String[] sandwichArray = sandwichValue.split("_");
@@ -142,28 +143,28 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
                 Map<String, String> breadTypesData = (Map<String, String>) dataSnapshot.child("breadTypes").getValue();
                 assert breadTypesData != null;
-                for(Map.Entry<String, String> breadData: breadTypesData.entrySet()) {
+                for (Map.Entry<String, String> breadData : breadTypesData.entrySet()) {
                     BreadModel breadModel = new BreadModel(breadData.getValue());
                     sandwichBreadTypesList.add(breadModel);
                 }
 
                 Map<String, String> vegetableData = (Map<String, String>) dataSnapshot.child("veges").getValue();
                 assert vegetableData != null;
-                for(Map.Entry<String, String> vegeData: vegetableData.entrySet()) {
+                for (Map.Entry<String, String> vegeData : vegetableData.entrySet()) {
                     VegetableModel vegetableModel = new VegetableModel(vegeData.getValue());
                     vegetableModelList.add(vegetableModel);
                 }
 
                 Map<String, String> saucesData = (Map<String, String>) dataSnapshot.child("sauces").getValue();
                 assert saucesData != null;
-                for(Map.Entry<String, String> sauceData: saucesData.entrySet()) {
+                for (Map.Entry<String, String> sauceData : saucesData.entrySet()) {
                     SaucesModel saucesModel = new SaucesModel(sauceData.getValue());
                     saucesModelList.add(saucesModel);
                 }
 
                 Map<String, String> paidData = (Map<String, String>) dataSnapshot.child("paid").getValue();
                 assert paidData != null;
-                for(Map.Entry<String, String> paid: paidData.entrySet()) {
+                for (Map.Entry<String, String> paid : paidData.entrySet()) {
                     String paidRAW = paid.getValue();
                     String[] paidSplit = paidRAW.split("_");
                     PaidAddsModel paidAddsModel = new PaidAddsModel(paidSplit[0], paidSplit[1]);
@@ -184,10 +185,10 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment loadedFragment = fm.findFragmentById(R.id.order_placing_frameLayout);
-                if(loadedFragment instanceof OrderTypesFragment) {
+                if (loadedFragment instanceof OrderTypesFragment) {
                     OrderTypesFragment orderTypesFragment1 = (OrderTypesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     String orderType = orderTypesFragment1.getOrderType();
-                    if(orderType.equals("drinks")) {
+                    if (orderType.equals("drinks")) {
                         Intent intent = new Intent(OrderPlacingActivity.this, OrderDrinksActivity.class);
                         startActivity(intent);
                     } else if (orderType.equals("sandwiches")) {
@@ -200,11 +201,11 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     }
                 }
 
-                if(loadedFragment instanceof CarrierChooserFragment) {
+                if (loadedFragment instanceof CarrierChooserFragment) {
                     /** Load SandwichChoicesFragment if CarrierChooserFragment has been previously loaded
                      * if carrier is not chosen then SnackBar will inform user **/
                     CarrierChooserFragment carrierChooserFragment = ((CarrierChooserFragment) fm.findFragmentById(R.id.order_placing_frameLayout));
-                    if(carrierChooserFragment.getSelectedCarrier() != null) {
+                    if (carrierChooserFragment.getSelectedCarrier() != null) {
                         carrierChosen = carrierChooserFragment.getSelectedCarrier();
                         SandwichChoicesFragment sandwichChoicesFragment = new SandwichChoicesFragment();
                         Bundle sandwichChoicesBundle = new Bundle();
@@ -220,10 +221,10 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 if (loadedFragment instanceof SandwichChoicesFragment) {
                     /** Load BreadTypeFragment if SandwichChoicesFragment has been previously loaded **/
                     SandwichChoicesFragment sandwichChoicesFragment = (SandwichChoicesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    if(sandwichChoicesFragment.getSandwichModelSelected() != null) {
+                    if (sandwichChoicesFragment.getSandwichModelSelected() != null) {
                         sandwichChosen = sandwichChoicesFragment.getSandwichModelSelected().getSandwichName();
                         sandwichPriceChosen = sandwichChoicesFragment.getSandwichModelSelected().getSandwichPrice();
-                        if(carrierChosen.equals("SALAD") || carrierChosen.equals("WRAP")) {
+                        if (carrierChosen.equals("SALAD") || carrierChosen.equals("WRAP")) {
                             VegetableFragment vegetableFragment = new VegetableFragment();
                             Bundle vegetableBundle = new Bundle();
                             vegetableBundle.putParcelableArrayList(SANDWICH_VEGETABLES, (ArrayList<VegetableModel>) vegetableModelList);
@@ -243,7 +244,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         Snackbar.make(order_placing_frameLayout, "Please choose Sub", Snackbar.LENGTH_SHORT).show();
                     }
                 }
-                if(loadedFragment instanceof BreadTypeFragment) {
+                if (loadedFragment instanceof BreadTypeFragment) {
                     /** Load VegetableFragment if BreadTypeFragment has been previously loaded **/
                     BreadTypeFragment breadTypeFragment = (BreadTypeFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     breadChosen = breadTypeFragment.getBreadType();
@@ -254,7 +255,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     ft.replace(R.id.order_placing_frameLayout, vegetableFragment);
                     ft.commit();
                 }
-                if(loadedFragment instanceof VegetableFragment) {
+                if (loadedFragment instanceof VegetableFragment) {
                     VegetableFragment vegetableFragment = (VegetableFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     vegetableChosen = vegetableFragment.getAllVegesChosen();
                     SaucesFragment saucesFragment = new SaucesFragment();
@@ -264,7 +265,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     ft.replace(R.id.order_placing_frameLayout, saucesFragment);
                     ft.commit();
                 }
-                if(loadedFragment instanceof SaucesFragment) {
+                if (loadedFragment instanceof SaucesFragment) {
                     SaucesFragment saucesFragment = (SaucesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     sauceChosen = saucesFragment.getAllSaucesChosen();
                     PaidAddsFragment paidAddsFragment = new PaidAddsFragment();
@@ -275,32 +276,37 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
                     ft.commit();
                 }
-                if(loadedFragment instanceof PaidAddsFragment) {
+                if (loadedFragment instanceof PaidAddsFragment) {
                     PaidAddsFragment paidAddsFragment = (PaidAddsFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     paidAddsChosen = paidAddsFragment.getPaidAddsData();
 
                     //Calculate final total price for sandwich
                     double d_sandwichPrice = Double.parseDouble(sandwichPriceChosen);
-                    if(carrierChosen.equals("SUB30")) {
+                    if (carrierChosen.equals("SUB30")) {
                         d_sandwichPrice = d_sandwichPrice + 8;
                     } else if (carrierChosen.equals("SALAD")) {
                         d_sandwichPrice = d_sandwichPrice + 2;
                     }
                     String[] paidArray = paidAddsChosen.split("-");
                     String[][] fullySplitPaidArray = new String[paidArray.length][];
-                    for(int i = 0; i < paidArray.length; i++) {
+                    for (int i = 0; i < paidArray.length; i++) {
                         fullySplitPaidArray[i] = paidArray[i].split("_");
                     }
 
                     // add all paid addOns
                     double final_sandwichPrice = d_sandwichPrice;
-                    for(int i = 0; i < fullySplitPaidArray.length;i++) {
-                        final_sandwichPrice = final_sandwichPrice + Double.parseDouble(fullySplitPaidArray[i][2]);
+                    for (String[] aFullySplitPaidArray : fullySplitPaidArray) {
+                        if (aFullySplitPaidArray.length > 1) {
+                            final_sandwichPrice = final_sandwichPrice + Double.parseDouble(aFullySplitPaidArray[2]);
+                        } else {
+                            final_sandwichPrice = d_sandwichPrice;
+                        }
                     }
+
 
                     FinalSandwichModel finalSandwichModel;
 
-                    if(carrierChosen.equals("SUB30") || carrierChosen.equals("SUB15")) {
+                    if (carrierChosen.equals("SUB30") || carrierChosen.equals("SUB15")) {
                         finalSandwichModel = new FinalSandwichModel(carrierChosen,
                                 sandwichChosen,
                                 breadChosen,
@@ -311,7 +317,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     } else {
                         finalSandwichModel = new FinalSandwichModel(carrierChosen,
                                 sandwichChosen,
-                                null,
+                                "null",
                                 vegetableChosen,
                                 sauceChosen,
                                 paidAddsChosen,

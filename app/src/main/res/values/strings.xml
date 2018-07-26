@@ -46,4 +46,7 @@
     <string name="save">Save</string>
     <string name="edit_data">Edit Data</string>
     <string name="total_price">Total Price</string>
+    <string name="order">Order</string>
+    <string name="delete">Delete</string>
+    <string name="add_to_fav">Add to Favorites</string>
 </resources>
