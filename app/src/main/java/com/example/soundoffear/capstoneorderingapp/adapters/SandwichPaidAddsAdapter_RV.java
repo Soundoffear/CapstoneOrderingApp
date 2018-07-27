@@ -51,7 +51,7 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
     @Override
     public void onBindViewHolder(@NonNull final SandwichPaidAdds_ViewHolder holder, int position) {
         final PaidAddsModel paidAddsModel = paidAddsModelList.get(position);
-        holder.paid_adds_currency_TV.setText("PLN");
+        holder.paid_adds_currency_TV.setText(paidContext.getResources().getString(R.string.pln));
         holder.paid_adds_name_tv.setText(paidAddsModel.getPaidAddName());
 
         d_numberCount = 0;
@@ -61,6 +61,12 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
         d_numberCount = Integer.parseInt(numberCount);
         finalPrice = d_pricePerOne * d_numberCount;
         holder.paid_adds_price_tv.setText(new DecimalFormat("#.##").format(finalPrice));
+        if (paidAddsModel.getPaidAddName().equals("Cheese")) {
+            holder.paid_adds_number_count_tv.setText("1");
+            holder.paidAddsModel = paidAddsModel;
+            holder.setSelected(1);
+        }
+
 
         // Set values once user decides to increase the amount
         holder.paid_adds_positive_btn.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +78,30 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
                 }
                 d_numberCount = Integer.parseInt(holder.paid_adds_number_count_tv.getText().toString());
                 d_numberCount++;
-                finalPrice = d_numberCount * d_pricePerOne;
-                holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
-                holder.paid_adds_price_tv.setText(new DecimalFormat("#.##").format(finalPrice));
-                onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                if (d_numberCount == 1 || d_numberCount == 0 && paidAddsModel.getPaidAddName().equals("Cheese")) {
+                    finalPrice = (d_numberCount - 1) * d_pricePerOne;
+                    holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
+                    holder.paid_adds_price_tv.setText(new DecimalFormat("#.##").format(finalPrice));
+                    onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                    holder.paidAddsModel = paidAddsModel;
+                    holder.setSelected(d_numberCount);
+                } else {
+                    if(paidAddsModel.getPaidAddName().equals("Cheese")) {
+                        finalPrice = (d_numberCount - 1) * d_pricePerOne;
+                        holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
+                        holder.paid_adds_price_tv.setText(new DecimalFormat("0.00").format(finalPrice));
+                        onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                        holder.paidAddsModel = paidAddsModel;
+                        holder.setSelected(d_numberCount);
+                    } else {
+                        finalPrice = d_numberCount * d_pricePerOne;
+                        holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
+                        holder.paid_adds_price_tv.setText(new DecimalFormat("0.00").format(finalPrice));
+                        onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                        holder.paidAddsModel = paidAddsModel;
+                        holder.setSelected(d_numberCount);
+                    }
+                }
             }
         });
 
@@ -90,16 +116,23 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
                 d_numberCount = Integer.parseInt(holder.paid_adds_number_count_tv.getText().toString());
                 if (d_numberCount > 0) {
                     d_numberCount--;
-                    finalPrice = d_numberCount * d_pricePerOne;
-                    holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
-                    holder.paid_adds_price_tv.setText(new DecimalFormat("#.##").format(finalPrice));
-                    onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                    if(paidAddsModel.getPaidAddName().equals("Cheese") && d_numberCount == 1 || d_numberCount == 0) {
+                        holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
+                        holder.paid_adds_price_tv.setText(new DecimalFormat("0.00").format(0));
+                        onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                        holder.paidAddsModel = paidAddsModel;
+                        holder.setSelected(d_numberCount);
+                    } else {
+                        finalPrice = d_numberCount * d_pricePerOne;
+                        holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
+                        holder.paid_adds_price_tv.setText(new DecimalFormat("0.00").format(finalPrice));
+                        onNumberOfPaidAddOnsListener.onFinalNumberSelected(paidAddsModel, d_numberCount, String.valueOf(finalPrice));
+                        holder.paidAddsModel = paidAddsModel;
+                        holder.setSelected(d_numberCount);
+                    }
                 }
             }
         });
-
-        holder.paidAddsModel = paidAddsModel;
-        holder.setSelected(holder.paidAddsModel.isSelected());
     }
 
     @Override
@@ -117,7 +150,7 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
     }
 
     @Override
-    public void onSelectedPaidAdd(PaidAddsModel paidAddsModel) {
+    public void onSelectedPaidAdd(PaidAddsModel paidAddsModel, int value) {
         if (!isMultiSelectable) {
             for (PaidAddsModel paidAddon : paidAddsModelList) {
                 if (!paidAddon.equals(paidAddsModel) && paidAddon.isSelected()) {
@@ -128,6 +161,6 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
             }
             notifyDataSetChanged();
         }
-        onPaidAddsSelectedListener.onSelectedPaidAdd(paidAddsModel);
+        onPaidAddsSelectedListener.onSelectedPaidAdd(paidAddsModel, value);
     }
 }

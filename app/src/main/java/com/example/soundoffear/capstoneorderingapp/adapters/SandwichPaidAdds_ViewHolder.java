@@ -37,7 +37,7 @@ public class SandwichPaidAdds_ViewHolder extends RecyclerView.ViewHolder impleme
     TextView paid_adds_price_tv;
     @BindView(R.id.paid_adds_name_textView) TextView paid_adds_name_tv;
 
-    public SandwichPaidAdds_ViewHolder(View itemView, OnPaidAddsSelectedListener listener, Context context) {
+    SandwichPaidAdds_ViewHolder(View itemView, OnPaidAddsSelectedListener listener, Context context) {
         super(itemView);
         this.paidContext = context;
         ButterKnife.bind(this, itemView);
@@ -45,24 +45,22 @@ public class SandwichPaidAdds_ViewHolder extends RecyclerView.ViewHolder impleme
         itemView.setOnClickListener(this);
     }
 
-    public void setSelected(boolean value) {
-        if(value) {
+    public void setSelected(int value) {
+        if(isMoreThanZero(value)) {
             paid_adds_background.setBackgroundColor(paidContext.getResources().getColor(R.color.colorAccent));
         } else {
             paid_adds_background.setBackgroundColor(paidContext.getResources().getColor(R.color.background));
         }
 
-        paidAddsModel.setSelected(value);
+        paidAddsModel.setSelected(isMoreThanZero(value));
+    }
+
+    public boolean isMoreThanZero(int value){
+        return value > 0;
     }
 
     @Override
     public void onClick(View v) {
-        if(paidAddsModel.isSelected() && getItemViewType() == MULTIPLESECECTION) {
-            setSelected(false);
-        } else {
-            setSelected(true);
-        }
 
-        onPaidAddsSelectedListener.onSelectedPaidAdd(paidAddsModel);
     }
 }

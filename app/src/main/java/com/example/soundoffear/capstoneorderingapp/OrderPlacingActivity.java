@@ -1,19 +1,24 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
@@ -22,10 +27,10 @@ import com.example.soundoffear.capstoneorderingapp.fragments.OrderTypesFragment;
 import com.example.soundoffear.capstoneorderingapp.models.BreadModel;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
 import com.example.soundoffear.capstoneorderingapp.models.OrderTypeModel;
-import com.example.soundoffear.capstoneorderingapp.models.VegetableModel;
 import com.example.soundoffear.capstoneorderingapp.models.PaidAddsModel;
 import com.example.soundoffear.capstoneorderingapp.models.SandwichModel;
 import com.example.soundoffear.capstoneorderingapp.models.SaucesModel;
+import com.example.soundoffear.capstoneorderingapp.models.VegetableModel;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.BreadTypeFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.CarrierChooserFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.PaidAddsFragment;
@@ -183,7 +188,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
+                final FragmentTransaction ft = fm.beginTransaction();
                 Fragment loadedFragment = fm.findFragmentById(R.id.order_placing_frameLayout);
                 if (loadedFragment instanceof OrderTypesFragment) {
                     OrderTypesFragment orderTypesFragment1 = (OrderTypesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
@@ -247,39 +252,91 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 if (loadedFragment instanceof BreadTypeFragment) {
                     /** Load VegetableFragment if BreadTypeFragment has been previously loaded **/
                     BreadTypeFragment breadTypeFragment = (BreadTypeFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    breadChosen = breadTypeFragment.getBreadType();
-                    VegetableFragment vegetableFragment = new VegetableFragment();
-                    Bundle vegetableBundle = new Bundle();
-                    vegetableBundle.putParcelableArrayList(SANDWICH_VEGETABLES, (ArrayList<VegetableModel>) vegetableModelList);
-                    vegetableFragment.setArguments(vegetableBundle);
-                    ft.replace(R.id.order_placing_frameLayout, vegetableFragment);
-                    ft.commit();
+                    if (breadTypeFragment.breadModelSelected != null) {
+                        breadChosen = breadTypeFragment.getBreadType();
+                        VegetableFragment vegetableFragment = new VegetableFragment();
+                        Bundle vegetableBundle = new Bundle();
+                        vegetableBundle.putParcelableArrayList(SANDWICH_VEGETABLES, (ArrayList<VegetableModel>) vegetableModelList);
+                        vegetableFragment.setArguments(vegetableBundle);
+                        ft.replace(R.id.order_placing_frameLayout, vegetableFragment);
+                        ft.commit();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please choose bread", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 if (loadedFragment instanceof VegetableFragment) {
                     VegetableFragment vegetableFragment = (VegetableFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    vegetableChosen = vegetableFragment.getAllVegesChosen();
-                    SaucesFragment saucesFragment = new SaucesFragment();
-                    Bundle sauceBundle = new Bundle();
-                    sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
-                    saucesFragment.setArguments(sauceBundle);
-                    ft.replace(R.id.order_placing_frameLayout, saucesFragment);
-                    ft.commit();
+                    if (!TextUtils.isEmpty(vegetableFragment.getAllVegesChosen())) {
+                        vegetableChosen = vegetableFragment.getAllVegesChosen();
+                        SaucesFragment saucesFragment = new SaucesFragment();
+                        Bundle sauceBundle = new Bundle();
+                        sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
+                        saucesFragment.setArguments(sauceBundle);
+                        ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                        ft.commit();
+                    } else {
+                        AlertDialog.Builder builder;
+                            builder = new AlertDialog.Builder(OrderPlacingActivity.this);
+
+                        builder.setTitle("No Vegetables")
+                                .setMessage("There is no vegetables selected, would you like to select some?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("No veges, please", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SaucesFragment saucesFragment = new SaucesFragment();
+                                Bundle sauceBundle = new Bundle();
+                                sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
+                                saucesFragment.setArguments(sauceBundle);
+                                ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                                ft.commit();
+                            }
+                        });
+                        builder.show();
+                    }
                 }
                 if (loadedFragment instanceof SaucesFragment) {
                     SaucesFragment saucesFragment = (SaucesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
+                    if(saucesFragment.getAllSaucesChosen() != null) {
                     sauceChosen = saucesFragment.getAllSaucesChosen();
-                    PaidAddsFragment paidAddsFragment = new PaidAddsFragment();
-                    Bundle paidAddsBundle = new Bundle();
-                    paidAddsBundle.putParcelableArrayList(SANDWICH_PAID_ADDS_BUNDLE, (ArrayList<PaidAddsModel>) paidAddsModelList);
-                    paidAddsBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
-                    paidAddsFragment.setArguments(paidAddsBundle);
-                    ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
-                    ft.commit();
+                        PaidAddsFragment paidAddsFragment = new PaidAddsFragment();
+                        Bundle paidAddsBundle = new Bundle();
+                        paidAddsBundle.putParcelableArrayList(SANDWICH_PAID_ADDS_BUNDLE, (ArrayList<PaidAddsModel>) paidAddsModelList);
+                        paidAddsBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
+                        paidAddsFragment.setArguments(paidAddsBundle);
+                        ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
+                        ft.commit();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(OrderPlacingActivity.this);
+                        builder.setTitle("No Sauces")
+                                .setMessage("There is no sauces selected, would you like to select some?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("No sauces, please", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SaucesFragment saucesFragment = new SaucesFragment();
+                                Bundle sauceBundle = new Bundle();
+                                sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
+                                saucesFragment.setArguments(sauceBundle);
+                                ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                                ft.commit();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
                 }
                 if (loadedFragment instanceof PaidAddsFragment) {
                     PaidAddsFragment paidAddsFragment = (PaidAddsFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     paidAddsChosen = paidAddsFragment.getPaidAddsData();
-
                     //Calculate final total price for sandwich
                     double d_sandwichPrice = Double.parseDouble(sandwichPriceChosen);
                     if (carrierChosen.equals("SUB30")) {
@@ -292,7 +349,6 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     for (int i = 0; i < paidArray.length; i++) {
                         fullySplitPaidArray[i] = paidArray[i].split("_");
                     }
-
                     // add all paid addOns
                     double final_sandwichPrice = d_sandwichPrice;
                     for (String[] aFullySplitPaidArray : fullySplitPaidArray) {
@@ -302,10 +358,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             final_sandwichPrice = d_sandwichPrice;
                         }
                     }
-
-
                     FinalSandwichModel finalSandwichModel;
-
                     if (carrierChosen.equals("SUB30") || carrierChosen.equals("SUB15")) {
                         finalSandwichModel = new FinalSandwichModel(carrierChosen,
                                 sandwichChosen,
@@ -323,9 +376,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                                 paidAddsChosen,
                                 String.valueOf(final_sandwichPrice));
                     }
-
                     finalSandwichDataBase.insertsDataIntoBuildSandwichDatabase(finalSandwichModel);
-
                     Intent startOrderSummary = new Intent(getApplicationContext(), OrderSummaryActivity.class);
                     startActivity(startOrderSummary);
                 }

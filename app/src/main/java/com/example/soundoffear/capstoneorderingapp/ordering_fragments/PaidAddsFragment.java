@@ -59,7 +59,7 @@ public class PaidAddsFragment extends Fragment implements OnPaidAddsSelectedList
     }
 
     @Override
-    public void onSelectedPaidAdd(PaidAddsModel paidAddsModel) {
+    public void onSelectedPaidAdd(PaidAddsModel paidAddsModel, int value) {
         Log.d("TEST", paidAddsModel.getPaidAddName());
     }
 
