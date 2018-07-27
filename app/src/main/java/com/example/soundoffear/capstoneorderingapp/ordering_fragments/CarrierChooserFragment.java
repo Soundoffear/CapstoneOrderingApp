@@ -61,9 +61,9 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
                     typesList.add(carrierModel);
                 }
 
-                Log.d("TEST 2", String.valueOf(typesList.size()));
                 SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(), typesList, CarrierChooserFragment.this, false);
                 carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
+
             }
 
             @Override

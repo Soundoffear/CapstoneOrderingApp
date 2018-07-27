@@ -78,7 +78,7 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
                 }
                 d_numberCount = Integer.parseInt(holder.paid_adds_number_count_tv.getText().toString());
                 d_numberCount++;
-                if (d_numberCount == 1 || d_numberCount == 0 && paidAddsModel.getPaidAddName().equals("Cheese")) {
+                if (d_numberCount == 1 && paidAddsModel.getPaidAddName().equals("Cheese") || d_numberCount == 0 && paidAddsModel.getPaidAddName().equals("Cheese")) {
                     finalPrice = (d_numberCount - 1) * d_pricePerOne;
                     holder.paid_adds_number_count_tv.setText(String.valueOf(d_numberCount));
                     holder.paid_adds_price_tv.setText(new DecimalFormat("#.##").format(finalPrice));

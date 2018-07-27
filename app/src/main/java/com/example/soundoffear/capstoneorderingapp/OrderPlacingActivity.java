@@ -192,17 +192,21 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 Fragment loadedFragment = fm.findFragmentById(R.id.order_placing_frameLayout);
                 if (loadedFragment instanceof OrderTypesFragment) {
                     OrderTypesFragment orderTypesFragment1 = (OrderTypesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    String orderType = orderTypesFragment1.getOrderType();
-                    if (orderType.equals("drinks")) {
-                        Intent intent = new Intent(OrderPlacingActivity.this, OrderDrinksActivity.class);
-                        startActivity(intent);
-                    } else if (orderType.equals("sandwiches")) {
-                        CarrierChooserFragment carrierChooserFragment = new CarrierChooserFragment();
-                        Bundle carrierBundle = new Bundle();
-                        carrierBundle.putStringArrayList(SANDWICH_CARRIERS, (ArrayList<String>) carriersList);
-                        carrierChooserFragment.setArguments(carrierBundle);
-                        ft.replace(R.id.order_placing_frameLayout, carrierChooserFragment);
-                        ft.commit();
+                    if (orderTypesFragment1.getOrderType() != null) {
+                        String orderType = orderTypesFragment1.getOrderType();
+                        if (orderType.equals("drinks")) {
+                            Intent intent = new Intent(OrderPlacingActivity.this, OrderDrinksActivity.class);
+                            startActivity(intent);
+                        } else if (orderType.equals("sandwiches")) {
+                            CarrierChooserFragment carrierChooserFragment = new CarrierChooserFragment();
+                            Bundle carrierBundle = new Bundle();
+                            carrierBundle.putStringArrayList(SANDWICH_CARRIERS, (ArrayList<String>) carriersList);
+                            carrierChooserFragment.setArguments(carrierBundle);
+                            ft.replace(R.id.order_placing_frameLayout, carrierChooserFragment);
+                            ft.commit();
+                        }
+                    } else {
+                        Snackbar.make(order_placing_frameLayout, "Please choose order", Snackbar.LENGTH_SHORT).show();
                     }
                 }
 
@@ -276,8 +280,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         ft.commit();
                     } else {
                         AlertDialog.Builder builder;
-                            builder = new AlertDialog.Builder(OrderPlacingActivity.this);
-
+                        builder = new AlertDialog.Builder(new ContextThemeWrapper(OrderPlacingActivity.this, R.style.alert_dialog_background));
                         builder.setTitle("No Vegetables")
                                 .setMessage("There is no vegetables selected, would you like to select some?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -301,8 +304,8 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 }
                 if (loadedFragment instanceof SaucesFragment) {
                     SaucesFragment saucesFragment = (SaucesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    if(saucesFragment.getAllSaucesChosen() != null) {
-                    sauceChosen = saucesFragment.getAllSaucesChosen();
+                    if (!TextUtils.isEmpty(saucesFragment.getAllSaucesChosen())) {
+                        sauceChosen = saucesFragment.getAllSaucesChosen();
                         PaidAddsFragment paidAddsFragment = new PaidAddsFragment();
                         Bundle paidAddsBundle = new Bundle();
                         paidAddsBundle.putParcelableArrayList(SANDWICH_PAID_ADDS_BUNDLE, (ArrayList<PaidAddsModel>) paidAddsModelList);
@@ -311,7 +314,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
                         ft.commit();
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(OrderPlacingActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(OrderPlacingActivity.this, R.style.alert_dialog_background));
                         builder.setTitle("No Sauces")
                                 .setMessage("There is no sauces selected, would you like to select some?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -322,11 +325,12 @@ public class OrderPlacingActivity extends AppCompatActivity {
                                 }).setNegativeButton("No sauces, please", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SaucesFragment saucesFragment = new SaucesFragment();
-                                Bundle sauceBundle = new Bundle();
-                                sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
-                                saucesFragment.setArguments(sauceBundle);
-                                ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                                PaidAddsFragment paidAddsFragment = new PaidAddsFragment();
+                                Bundle paidAddsBundle = new Bundle();
+                                paidAddsBundle.putParcelableArrayList(SANDWICH_PAID_ADDS_BUNDLE, (ArrayList<PaidAddsModel>) paidAddsModelList);
+                                paidAddsBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
+                                paidAddsFragment.setArguments(paidAddsBundle);
+                                ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
                                 ft.commit();
                             }
                         });

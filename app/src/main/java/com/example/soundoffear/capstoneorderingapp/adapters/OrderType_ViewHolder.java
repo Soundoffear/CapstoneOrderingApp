@@ -48,9 +48,9 @@ public class OrderType_ViewHolder extends RecyclerView.ViewHolder implements Vie
 
     public void setSelected(boolean isSelected) {
         if(isSelected) {
-            order_type_background.setBackgroundColor(orderContext.getResources().getColor(R.color.colorAccent));
+            order_type_background.setBackgroundDrawable(orderContext.getResources().getDrawable(R.drawable.circular_layout_selected));
         } else {
-            order_type_background.setBackgroundColor(orderContext.getResources().getColor(R.color.background));
+            order_type_background.setBackgroundDrawable(orderContext.getResources().getDrawable(R.drawable.circular_layout));
         }
         orderTypeModel.setSelected(isSelected);
     }
