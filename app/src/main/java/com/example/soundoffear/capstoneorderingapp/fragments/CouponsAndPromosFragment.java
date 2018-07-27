@@ -55,10 +55,6 @@ public class CouponsAndPromosFragment extends Fragment {
                     couponsList.add(couponData.getKey());
                 }
 
-                for(int i = 0; i < couponsList.size(); i++) {
-                    Log.d("Coupons List", couponsList.get(i));
-                }
-
                 CouponsAndPromoAdapter_RV couponsAndPromoAdapter_rv = new CouponsAndPromoAdapter_RV(getContext(), couponsList);
                 coupons_and_promo_recyclerView.setAdapter(couponsAndPromoAdapter_rv);
             }

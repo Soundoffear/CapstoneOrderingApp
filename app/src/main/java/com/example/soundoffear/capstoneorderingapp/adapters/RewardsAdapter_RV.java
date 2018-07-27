@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.R;
+import com.example.soundoffear.capstoneorderingapp.models.RewardModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,58 +24,59 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CouponsAndPromoAdapter_RV extends RecyclerView.Adapter<CouponsAndPromoAdapter_RV.CouponsAndPromoViewHolder> {
+public class RewardsAdapter_RV extends RecyclerView.Adapter<RewardsAdapter_RV.RewardsViewHolder> {
 
-    private Context cContext;
-    private List<String> couponsList;
+    private Context rContext;
+    private List<RewardModel> rewardModelList;
 
-    public CouponsAndPromoAdapter_RV(Context cContext, List<String> couponsList) {
-        this.cContext = cContext;
-        this.couponsList = couponsList;
+    public RewardsAdapter_RV(Context rContext, List<RewardModel> rewardModelList) {
+        this.rContext = rContext;
+        this.rewardModelList = rewardModelList;
     }
 
     @NonNull
     @Override
-    public CouponsAndPromoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View couponsView = LayoutInflater.from(cContext).inflate(R.layout.item_coupons_and_promo, parent, false);
+    public RewardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(rContext).inflate(R.layout.item_rewards, parent, false);
 
-        return new CouponsAndPromoViewHolder(couponsView);
+        return new RewardsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CouponsAndPromoViewHolder holder, int position) {
-        String extension = ".png";
-        final String finalURL = "Coupons/" + couponsList.get(position)+ extension;
+    public void onBindViewHolder(@NonNull final RewardsViewHolder holder, int position) {
+        RewardModel rewardModel = rewardModelList.get(position);
+
+        String imageUrl = "Rewards/"+rewardModel.getRewardName()+".png";
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance("gs://orderingapp-aa10b.appspot.com");
 
         StorageReference storageReference = firebaseStorage.getReference();
 
-        storageReference.child(finalURL).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageReference.child(imageUrl).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Log.d("ON SUCCESS", String.valueOf(uri));
-                Picasso.get().load(uri).into(holder.coupons_and_promo_imageView);
+                Log.d("REWARDS SUCCESS", uri.toString());
+                Picasso.get().load(uri).into(holder.rewards_imageView);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(cContext, "Sorry we could not load images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(rContext, "Unable to load images", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return couponsList.size();
+        return rewardModelList.size();
     }
 
-    class CouponsAndPromoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RewardsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.coupons_and_promo_imageView)
-        ImageView coupons_and_promo_imageView;
+        @BindView(R.id.rewards_imageView)
+        ImageView rewards_imageView;
 
-        CouponsAndPromoViewHolder(View itemView) {
+        RewardsViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);

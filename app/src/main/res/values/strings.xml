@@ -50,4 +50,5 @@
     <string name="delete">Delete</string>
     <string name="add_to_fav">Add to Favorites</string>
     <string name="coup_desc">Coupons description</string>
+    <string name="rewards_image">rewards image</string>
 </resources>
