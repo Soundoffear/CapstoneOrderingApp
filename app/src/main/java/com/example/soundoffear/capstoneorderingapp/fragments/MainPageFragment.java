@@ -20,12 +20,16 @@ import com.example.soundoffear.capstoneorderingapp.contracts.DrinksOrderContract
 import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.models.OrderTypeModel;
+import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
+import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +49,8 @@ public class MainPageFragment extends Fragment {
     @BindView(R.id.button_new_order)
     Button newOrder_button;
 
-    private int testProgressValue;
+    private int maximumPoints = 10000;
+    private String maximumPointsString = "/10000";
 
     public MainPageFragment() {
     }
@@ -59,17 +64,11 @@ public class MainPageFragment extends Fragment {
         final FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getContext());
         final DrinksOrderDatabase drinksOrderDatabase = new DrinksOrderDatabase(getContext());
 
-        testProgressValue = 30;
-
-        pointsProgressBar.setProgress(testProgressValue);
-
-        testProgressValue = testProgressValue * 100;
-
-        pointsTextView.setText(testProgressValue + "/10000");
-
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         DatabaseReference databaseReference1 = firebaseDatabase.getReference();
+
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         final List<OrderTypeModel> orderTypesList = new ArrayList<>();
 
@@ -78,13 +77,50 @@ public class MainPageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(Map.Entry<String, Object> data: ((Map<String, Object>) dataSnapshot.getValue()).entrySet()) {
-                    if(!data.getKey().equals("users")) {
+                    if(!data.getKey().equals("users") || !data.getKey().equals("rewards") || !data.getKey().equals("coupons")) {
                         OrderTypeModel orderTypeModel = new OrderTypeModel(data.getKey());
                         orderTypesList.add(orderTypeModel);
                     }
+
                 }
 
                 Log.d("TEST", String.valueOf(orderTypesList.size()));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference pointsDBRefrence = firebaseDatabase.getReference().child(Constants.DATABASE_USERS).child(userID);
+
+        pointsDBRefrence.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, Object> userData = (Map<String, Object>) dataSnapshot.getValue();
+                assert userData != null;
+                Log.d("TEST DATA", String.valueOf(userData.size()));
+
+                for(Map.Entry<String, Object> pointsData: ((Map<String, Object>) dataSnapshot.getValue()).entrySet()) {
+                    if(pointsData.getKey().equals(Constants.DATABASE_USER_POINTS)) {
+                        Log.d("Check Points exists", "YES");
+                        String pointsDisplay = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue()))) + maximumPointsString;
+                        pointsTextView.setText(pointsDisplay);
+                        String points = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue())));
+                        double pointsDataBase = Double.parseDouble(points);
+                        double progressDouble = (pointsDataBase / maximumPoints) * 100;
+                        int progressValue = Integer.parseInt(new DecimalFormat("#").format(progressDouble));
+
+                        Log.d("Progress Value", String.valueOf(progressValue) + " " + progressDouble + " " + pointsDataBase);
+
+                        pointsProgressBar.setProgress(progressValue);
+                    } else {
+                        Log.d("Points not exists", pointsData.getKey());
+
+                    }
+                }
 
             }
 

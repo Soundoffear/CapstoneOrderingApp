@@ -51,4 +51,7 @@
     <string name="add_to_fav">Add to Favorites</string>
     <string name="coup_desc">Coupons description</string>
     <string name="rewards_image">rewards image</string>
+    <string name="selected_reward_to_redeem">Selected reward to redeem</string>
+    <string name="redeem_award">Redeem Award</string>
+    <string name="enter_pin">enter pin</string>
 </resources>

@@ -64,9 +64,6 @@ public class OrderTypeModel implements Parcelable {
         }
 
         OrderTypeModel orderTypeModel = (OrderTypeModel) obj;
-        if(orderTypeModel.getOrderType().equals(this.getOrderType())) {
-            return true;
-        }
-        return false;
+        return orderTypeModel.getOrderType().equals(this.getOrderType());
     }
 }

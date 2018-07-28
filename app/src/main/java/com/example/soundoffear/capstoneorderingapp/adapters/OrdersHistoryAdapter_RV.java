@@ -3,6 +3,8 @@ package com.example.soundoffear.capstoneorderingapp.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,22 +63,34 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_bread_output.setText(historyModel.getBread());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_final_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
                     StringBuilder paidStringBuilder = new StringBuilder();
-                    String[] splittedPaid = historyModel.getPaidAddons().split("-");
-                    for (String aSplittedPaid : splittedPaid) {
-                        String[] splittedAddOn = aSplittedPaid.split("_");
-                        paidStringBuilder.append(splittedAddOn[0]).append(" ").append("x").append(" ").append(splittedAddOn[1]).append("\n");
+                    if(!TextUtils.isEmpty(historyModel.getPaidAddons())) {
+                        String[] splittedPaid = historyModel.getPaidAddons().split("-");
+                        for (String aSplittedPaid : splittedPaid) {
+                            String[] splittedAddOn = aSplittedPaid.split("_");
+                            paidStringBuilder.append(splittedAddOn[0]).append(" ").append("x").append(" ").append(splittedAddOn[1]).append("\n");
+                        }
+                    } else {
+                        paidStringBuilder.append("-");
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_paid_addons_output.setText(paidStringBuilder.toString());
                     StringBuilder saucesSB = new StringBuilder();
-                    String[] sauces = historyModel.getSauces().split("_");
-                    for(String sauce: sauces) {
-                        saucesSB.append(sauce).append(" ");
+                    if(!TextUtils.isEmpty(historyModel.getSauces())) {
+                        String[] sauces = historyModel.getSauces().split("_");
+                        for (String sauce : sauces) {
+                            saucesSB.append(sauce).append(" ");
+                        }
+                    } else {
+                        saucesSB.append("-");
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_sauces_output.setText(saucesSB.toString());
                     StringBuilder vegesSB = new StringBuilder();
-                    String[] vegetables = historyModel.getVegetables().split("_");
-                    for(String vegetable: vegetables) {
-                        vegesSB.append(vegetable).append(" ");
+                    if(!TextUtils.isEmpty(historyModel.getVegetables())) {
+                        String[] vegetables = historyModel.getVegetables().split("_");
+                        for (String vegetable : vegetables) {
+                            vegesSB.append(vegetable).append(" ");
+                        }
+                    } else {
+                        vegesSB.append("-");
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_vegetable_output.setText(vegesSB.toString());
                     break;

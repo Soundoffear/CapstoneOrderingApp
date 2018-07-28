@@ -1,17 +1,17 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.example.soundoffear.capstoneorderingapp.fragments.CouponsAndPromosFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.DeliveryAddressEntryFragment;
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
         fragmentTransaction.commit();
 
-        NavigationView navigationView = findViewById(R.id.main_navigationView);
+        navigationView = findViewById(R.id.main_navigationView);
+        setSelectedNavDrawerItem(R.id.main_screen);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -69,22 +72,22 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.main_screen:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new MainPageFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new MainPageFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.coupons_and_promo:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new CouponsAndPromosFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new CouponsAndPromosFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.order_history:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderHistoryFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderHistoryFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.favorites:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new FavoritesFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new FavoritesFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.redeem_rewards:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RedeemRewardsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RedeemRewardsFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.order_status:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderStatusFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderStatusFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.delivery_address:
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -109,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
                                     UserDataOutputFragment userDataOutputFragment = new UserDataOutputFragment();
                                     userDataOutputFragment.setArguments(userBundle);
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, userDataOutputFragment).commit();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, userDataOutputFragment).addToBackStack(null).commit();
 
                                 } else {
                                     Log.d("USER TEST DATA", "dataSnapshot empty");
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new DeliveryAddressEntryFragment()).commit();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new DeliveryAddressEntryFragment()).addToBackStack(null).commit();
 
                                 }
                             }
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.settings:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new SettingsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new SettingsFragment()).addToBackStack(null).commit();
                         break;
                 }
 
@@ -134,6 +137,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_frameLayout);
+                if(f instanceof MainPageFragment) {
+                    setSelectedNavDrawerItem(R.id.main_screen);
+                } else if(f instanceof CouponsAndPromosFragment) {
+                    setSelectedNavDrawerItem(R.id.coupons_and_promo);
+                } else if(f instanceof OrderHistoryFragment) {
+                    setSelectedNavDrawerItem(R.id.order_history);
+                } else if(f instanceof FavoritesFragment) {
+                    setSelectedNavDrawerItem(R.id.favorites);
+                } else if(f instanceof RedeemRewardsFragment) {
+                    setSelectedNavDrawerItem(R.id.redeem_rewards);
+                } else if(f instanceof OrderStatusFragment) {
+                    setSelectedNavDrawerItem(R.id.order_status);
+                } else if (f instanceof DeliveryAddressEntryFragment) {
+                    setSelectedNavDrawerItem(R.id.delivery_address);
+                } else if (f instanceof SettingsFragment) {
+                    setSelectedNavDrawerItem(R.id.settings);
+                }
+            }
+        });
+
+    }
+
+    void setSelectedNavDrawerItem(int id) {
+        navigationView.setCheckedItem(id);
     }
 
     @Override

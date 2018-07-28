@@ -21,6 +21,8 @@ import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBa
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.models.DrinksModel;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
+import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
+import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,10 +50,14 @@ public class OrderSummaryActivity extends AppCompatActivity {
     @BindView(R.id.order_summary_total_price_output)
     TextView order_summary_total_price_output;
 
-    @BindView(R.id.order_summary_fabMenu) FloatingActionsMenu floatingActionsMenu;
-    @BindView(R.id.order_summary_button_add_drink) FloatingActionButton fab_add_drink;
-    @BindView(R.id.order_summary_button_add_sandwich) FloatingActionButton fab_add_sandwich;
-    @BindView(R.id.order_summary_button_add_sides) FloatingActionButton fab_add_sides;
+    @BindView(R.id.order_summary_fabMenu)
+    FloatingActionsMenu floatingActionsMenu;
+    @BindView(R.id.order_summary_button_add_drink)
+    FloatingActionButton fab_add_drink;
+    @BindView(R.id.order_summary_button_add_sandwich)
+    FloatingActionButton fab_add_sandwich;
+    @BindView(R.id.order_summary_button_add_sides)
+    FloatingActionButton fab_add_sides;
 
     @BindView(R.id.order_summary_send_order)
     Button order_summary_send_button;
@@ -83,26 +89,26 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         final List<FinalSandwichModel> finalSandwichModelList = finalSandwichDataBase.getAllFinalSandwichData();
         final List<DrinksModel> drinksModelList = drinksOrderDatabase.getAllDrinksData();
-        if(finalSandwichModelList.size() > 0) {
+        if (finalSandwichModelList.size() > 0) {
             order_summary_recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             order_summary_recyclerView.setLayoutManager(linearLayoutManager);
             FinalSandwichAdapter_RV finalSandwichAdapter_rv = new FinalSandwichAdapter_RV(this, finalSandwichModelList);
             order_summary_recyclerView.setAdapter(finalSandwichAdapter_rv);
-            for(FinalSandwichModel finalSandwichModel: finalSandwichModelList) {
-                countTotalPrice = countTotalPrice+Double.parseDouble(finalSandwichModel.getFinalPrice());
+            for (FinalSandwichModel finalSandwichModel : finalSandwichModelList) {
+                countTotalPrice = countTotalPrice + Double.parseDouble(finalSandwichModel.getFinalPrice());
             }
         } else {
             order_summary_recyclerView.setVisibility(View.GONE);
         }
 
-        if(drinksModelList.size() > 0) {
+        if (drinksModelList.size() > 0) {
             order_summary_drinks_recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(this);
             order_summary_drinks_recyclerView.setLayoutManager(linearLayoutManager1);
             DrinksOrderSummaryAdapter_RV drinksOrderSummaryAdapter_rv = new DrinksOrderSummaryAdapter_RV(this, drinksModelList);
             order_summary_drinks_recyclerView.setAdapter(drinksOrderSummaryAdapter_rv);
-            for(DrinksModel drinksModel: drinksModelList) {
+            for (DrinksModel drinksModel : drinksModelList) {
                 countTotalPrice = countTotalPrice + Double.parseDouble(drinksModel.getPrice());
             }
         } else {
@@ -111,7 +117,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         order_summary_total_price_output.setText(new DecimalFormat("0.00").format(countTotalPrice));
 
-        if(FavoritesFragment.isAddingFav) {
+        if (FavoritesFragment.isAddingFav) {
             floatingActionsMenu.setVisibility(View.GONE);
             fab_add_drink.setVisibility(View.GONE);
             fab_add_sides.setVisibility(View.GONE);
@@ -157,23 +163,23 @@ public class OrderSummaryActivity extends AppCompatActivity {
                 Log.d("SENDING DATA", "Sending data");
                 countDrinks = 0;
                 countSubs = 0;
-                if(FavoritesFragment.isAddingFav) {
-                    databaseReference.child("users").child(userID).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+                if (FavoritesFragment.isAddingFav) {
+                    databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Log.d("FAV DATA 1", dataSnapshot.getKey());
                             Map<String, Object> datas = (Map<String, Object>) dataSnapshot.getValue();
-                            if(datas != null) {
+                            if (datas != null) {
                                 String[] keySplit = String.valueOf(datas.keySet().toArray()[0]).split(" ");
                                 int keyNumber = Integer.parseInt(keySplit[1]);
                                 favoriteName = "Favorite " + (keyNumber + 1);
                                 Log.d("FAV DATA", favoriteName);
                             }
-                            if(TextUtils.isEmpty(favoriteName)) {
+                            if (TextUtils.isEmpty(favoriteName)) {
                                 favoriteName = "Favorite 1";
                             }
 
-                            databaseReference.child("users").child(userID).child("favorites").child(favoriteName).setValue(finalSandwichModelList.get(0));
+                            databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").child(favoriteName).setValue(finalSandwichModelList.get(0));
                             Toast.makeText(getApplicationContext(), "Item added to Favorites", Toast.LENGTH_SHORT).show();
 
                             Intent intentToStartMainActivity = new Intent(OrderSummaryActivity.this, MainActivity.class);
@@ -185,16 +191,18 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
                         }
                     });
-
-
-
                 } else {
                     String orderNumber = String.valueOf(new Date(System.currentTimeMillis()));
                     if (drinksModelList.size() > 1) {
                         for (int i = 0; i < drinksModelList.size(); i++) {
                             countDrinks++;
                             drinksString = "Drink" + countDrinks;
-                            databaseReference.child("users").child(userID).child("orders").child(orderNumber).child(drinksString).setValue(drinksModelList.get(i));
+                            databaseReference.child(Constants.DATABASE_USERS)
+                                    .child(userID)
+                                    .child(Constants.DATABASE_ORDERS)
+                                    .child(orderNumber)
+                                    .child(drinksString)
+                                    .setValue(drinksModelList.get(i));
                         }
                     }
 
@@ -202,9 +210,17 @@ public class OrderSummaryActivity extends AppCompatActivity {
                         for (int i = 0; i < finalSandwichModelList.size(); i++) {
                             countSubs++;
                             subsString = "Sub" + countSubs;
-                            databaseReference.child("users").child(userID).child("orders").child(orderNumber).child(subsString).setValue(finalSandwichModelList.get(i));
+                            databaseReference.child(Constants.DATABASE_USERS)
+                                    .child(userID)
+                                    .child(Constants.DATABASE_ORDERS)
+                                    .child(orderNumber)
+                                    .child(subsString)
+                                    .setValue(finalSandwichModelList.get(i));
                         }
                     }
+                    PointsSystemClass.addPoints(new DecimalFormat("#").format(Math.round(countTotalPrice)), userID);
+                    Intent goToMainPageIntent = new Intent(OrderSummaryActivity.this, MainActivity.class);
+                    startActivity(goToMainPageIntent);
                 }
             }
         });

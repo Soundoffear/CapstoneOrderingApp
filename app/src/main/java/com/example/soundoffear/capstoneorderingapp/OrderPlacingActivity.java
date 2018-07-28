@@ -203,6 +203,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             carrierBundle.putStringArrayList(SANDWICH_CARRIERS, (ArrayList<String>) carriersList);
                             carrierChooserFragment.setArguments(carrierBundle);
                             ft.replace(R.id.order_placing_frameLayout, carrierChooserFragment);
+                            ft.addToBackStack(null);
                             ft.commit();
                         }
                     } else {
@@ -222,6 +223,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         sandwichChoicesBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
                         sandwichChoicesFragment.setArguments(sandwichChoicesBundle);
                         ft.replace(R.id.order_placing_frameLayout, sandwichChoicesFragment);
+                        ft.addToBackStack(null);
                         ft.commit();
                     } else {
                         Snackbar.make(order_placing_frameLayout, "Please choose type", Snackbar.LENGTH_SHORT).show();
@@ -239,6 +241,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             vegetableBundle.putParcelableArrayList(SANDWICH_VEGETABLES, (ArrayList<VegetableModel>) vegetableModelList);
                             vegetableFragment.setArguments(vegetableBundle);
                             ft.replace(R.id.order_placing_frameLayout, vegetableFragment);
+                            ft.addToBackStack(null);
                             ft.commit();
                         } else {
                             BreadTypeFragment breadTypeFragment = new BreadTypeFragment();
@@ -247,6 +250,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             breadTypeBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
                             breadTypeFragment.setArguments(breadTypeBundle);
                             ft.replace(R.id.order_placing_frameLayout, breadTypeFragment);
+                            ft.addToBackStack(null);
                             ft.commit();
                         }
                     } else {
@@ -263,6 +267,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         vegetableBundle.putParcelableArrayList(SANDWICH_VEGETABLES, (ArrayList<VegetableModel>) vegetableModelList);
                         vegetableFragment.setArguments(vegetableBundle);
                         ft.replace(R.id.order_placing_frameLayout, vegetableFragment);
+                        ft.addToBackStack(null);
                         ft.commit();
                     } else {
                         Toast.makeText(getApplicationContext(), "Please choose bread", Toast.LENGTH_SHORT).show();
@@ -277,6 +282,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
                         saucesFragment.setArguments(sauceBundle);
                         ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                        ft.addToBackStack(null);
                         ft.commit();
                     } else {
                         AlertDialog.Builder builder;
@@ -296,6 +302,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                                 sauceBundle.putParcelableArrayList(SANDWICH_SAUCE_BUNDLE, (ArrayList<SaucesModel>) saucesModelList);
                                 saucesFragment.setArguments(sauceBundle);
                                 ft.replace(R.id.order_placing_frameLayout, saucesFragment);
+                                ft.addToBackStack(null);
                                 ft.commit();
                             }
                         });
@@ -312,6 +319,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         paidAddsBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
                         paidAddsFragment.setArguments(paidAddsBundle);
                         ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
+                        ft.addToBackStack(null);
                         ft.commit();
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(OrderPlacingActivity.this, R.style.alert_dialog_background));
@@ -331,6 +339,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                                 paidAddsBundle.putString(SANDWICH_CARRIER_CHOSEN, carrierChosen);
                                 paidAddsFragment.setArguments(paidAddsBundle);
                                 ft.replace(R.id.order_placing_frameLayout, paidAddsFragment);
+                                ft.addToBackStack(null);
                                 ft.commit();
                             }
                         });

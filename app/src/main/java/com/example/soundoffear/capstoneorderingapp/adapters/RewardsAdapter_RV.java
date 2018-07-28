@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.R;
+import com.example.soundoffear.capstoneorderingapp.interfaces.OnRewardSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.models.RewardModel;
+import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,10 +30,12 @@ public class RewardsAdapter_RV extends RecyclerView.Adapter<RewardsAdapter_RV.Re
 
     private Context rContext;
     private List<RewardModel> rewardModelList;
+    OnRewardSelectedListener onRewardSelectedListener;
 
-    public RewardsAdapter_RV(Context rContext, List<RewardModel> rewardModelList) {
+    public RewardsAdapter_RV(Context rContext, List<RewardModel> rewardModelList, OnRewardSelectedListener rewardSelectedListener) {
         this.rContext = rContext;
         this.rewardModelList = rewardModelList;
+        this.onRewardSelectedListener = rewardSelectedListener;
     }
 
     @NonNull
@@ -84,7 +88,7 @@ public class RewardsAdapter_RV extends RecyclerView.Adapter<RewardsAdapter_RV.Re
 
         @Override
         public void onClick(View v) {
-
+            onRewardSelectedListener.onRewardSelected(rewardModelList.get(getLayoutPosition()));
         }
     }
 
