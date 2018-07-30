@@ -9,5 +9,6 @@ public class Constants {
     public static final String DATABASE_USERS = "users";
     public static final String DATABASE_USER_POINTS = "points";
     public static final String DATABASE_ORDERS = "orders";
+    public static final String DATABASE_FAVORITES = "favorites";
 
 }

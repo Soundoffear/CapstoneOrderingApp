@@ -1,5 +1,6 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,8 @@ import com.example.soundoffear.capstoneorderingapp.fragments.RedeemRewardsFragme
 import com.example.soundoffear.capstoneorderingapp.fragments.SettingsFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.UserDataOutputFragment;
 import com.example.soundoffear.capstoneorderingapp.models.UserDataModel;
+import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
+import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView;
 
+    private String widgetReceivedString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +58,25 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
+        Intent intent = getIntent();
+        if(intent != null) {
+            widgetReceivedString = intent.getStringExtra(FavoritesWidget.DATA_FAV);
+        }
+
         drawerLayout = findViewById(R.id.nav_drawer_layout);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
-        fragmentTransaction.commit();
+
+        if(widgetReceivedString.equals(Constants.DATABASE_FAVORITES)) {
+            fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }else {
+            fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
 
         navigationView = findViewById(R.id.main_navigationView);
         setSelectedNavDrawerItem(R.id.main_screen);

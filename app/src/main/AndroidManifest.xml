@@ -46,6 +46,20 @@
         <activity
             android:name=".OrderDrinksActivity"
             android:screenOrientation="portrait" />
+        
+
+        <service android:name=".widget.FavoritesWidgetServices"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <receiver android:name=".widget.FavoritesWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favorites_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
