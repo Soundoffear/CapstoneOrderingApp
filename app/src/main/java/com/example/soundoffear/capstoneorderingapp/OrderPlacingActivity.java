@@ -39,6 +39,7 @@ import com.example.soundoffear.capstoneorderingapp.ordering_fragments.CateringFr
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.PaidAddsFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.SandwichChoicesFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.SaucesFragment;
+import com.example.soundoffear.capstoneorderingapp.ordering_fragments.SidesFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.VegetableFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -212,6 +213,11 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         } else if (orderType.equals("catering")) {
                             CateringFragments cateringFragments = new CateringFragments();
                             ft.replace(R.id.order_placing_frameLayout, cateringFragments);
+                            ft.addToBackStack(null);
+                            ft.commit();
+                        } else if (orderType.equals("sides")) {
+                            SidesFragment sidesFragment = new SidesFragment();
+                            ft.replace(R.id.order_placing_frameLayout, sidesFragment);
                             ft.addToBackStack(null);
                             ft.commit();
                         }
