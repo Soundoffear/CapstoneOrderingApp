@@ -13,12 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.soundoffear.capstoneorderingapp.adapters.CateringSummaryAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.adapters.DrinksAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.adapters.DrinksOrderSummaryAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.adapters.FinalSandwichAdapter_RV;
+import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
+import com.example.soundoffear.capstoneorderingapp.models.CateringModel;
 import com.example.soundoffear.capstoneorderingapp.models.DrinksModel;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
@@ -47,6 +50,10 @@ public class OrderSummaryActivity extends AppCompatActivity {
     RecyclerView order_summary_recyclerView;
     @BindView(R.id.order_summary_drinks_recyclerView)
     RecyclerView order_summary_drinks_recyclerView;
+    @BindView(R.id.order_summary_catering_recyclerView)
+    RecyclerView order_summary_catering_recyclerView;
+    @BindView(R.id.order_summary_sides_recyclerView)
+    RecyclerView order_summary_sides_recyclerView;
     @BindView(R.id.order_summary_total_price_output)
     TextView order_summary_total_price_output;
 
@@ -64,9 +71,13 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     private String drinksString;
     private String subsString;
+    private String cateringString;
+    private String sidesString;
 
     private int countDrinks = 0;
     private int countSubs = 0;
+    private int countCatering = 0;
+    private int countSides = 0;
 
     private double countTotalPrice;
 
@@ -86,6 +97,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getApplicationContext());
         DrinksOrderDatabase drinksOrderDatabase = new DrinksOrderDatabase(getApplicationContext());
+        CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getApplicationContext());
 
         final List<FinalSandwichModel> finalSandwichModelList = finalSandwichDataBase.getAllFinalSandwichData();
         final List<DrinksModel> drinksModelList = drinksOrderDatabase.getAllDrinksData();
@@ -115,6 +127,21 @@ public class OrderSummaryActivity extends AppCompatActivity {
             order_summary_drinks_recyclerView.setVisibility(View.GONE);
         }
 
+        final List<CateringModel> cateringModelList = cateringOrderDatabase.getCateringData();
+        Log.d("TEST VALUE", String.valueOf(cateringModelList.size()));
+        if(cateringModelList.size() > 0) {
+            order_summary_catering_recyclerView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            order_summary_catering_recyclerView.setLayoutManager(linearLayoutManager);
+            CateringSummaryAdapter_RV cateringSummaryAdapter_rv = new CateringSummaryAdapter_RV(getApplicationContext(), cateringModelList);
+            order_summary_catering_recyclerView.setAdapter(cateringSummaryAdapter_rv);
+            for(CateringModel cateringModel: cateringModelList) {
+                countTotalPrice = countTotalPrice + Double.parseDouble(cateringModel.getCateringPrice());
+            }
+        } else {
+            order_summary_catering_recyclerView.setVisibility(View.GONE);
+        }
+
         order_summary_total_price_output.setText(new DecimalFormat("0.00").format(countTotalPrice));
 
         if (FavoritesFragment.isAddingFav) {
@@ -122,7 +149,6 @@ public class OrderSummaryActivity extends AppCompatActivity {
             fab_add_drink.setVisibility(View.GONE);
             fab_add_sides.setVisibility(View.GONE);
             fab_add_sandwich.setVisibility(View.GONE);
-
             order_summary_send_button.setText(getString(R.string.add_to_fav));
 
         } else {
@@ -216,6 +242,19 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                     .child(orderNumber)
                                     .child(subsString)
                                     .setValue(finalSandwichModelList.get(i));
+                        }
+                    }
+
+                    if(cateringModelList.size() > 0) {
+                        for(int i = 0; i < cateringModelList.size(); i++) {
+                            countCatering++;
+                            cateringString = "Catering"+countCatering;
+                            databaseReference.child(Constants.DATABASE_USERS)
+                                    .child(userID)
+                                    .child(Constants.DATABASE_CATERING)
+                                    .child(orderNumber)
+                                    .child(cateringString)
+                                    .setValue(cateringModelList.get(i));
                         }
                     }
                     PointsSystemClass.addPoints(new DecimalFormat("#").format(Math.round(countTotalPrice)), userID);

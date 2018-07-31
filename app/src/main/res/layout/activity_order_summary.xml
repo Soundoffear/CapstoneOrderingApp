@@ -31,10 +31,30 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/background"
-        app:layout_constraintBottom_toTopOf="@+id/order_summary_linear_layout"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary_catering_recyclerView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/order_summary_recyclerView" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/order_summary_catering_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background"
+        app:layout_constraintTop_toBottomOf="@+id/order_summary_drinks_recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary_sides_recyclerView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/order_summary_sides_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_summary_catering_recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary_price_ll"/>
 
     <LinearLayout
         android:id="@+id/order_summary_price_ll"

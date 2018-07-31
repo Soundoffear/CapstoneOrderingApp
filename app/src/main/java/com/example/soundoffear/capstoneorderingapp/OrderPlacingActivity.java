@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.soundoffear.capstoneorderingapp.contracts.CateringOrderContract;
+import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.MainPageFragment;
@@ -33,6 +35,7 @@ import com.example.soundoffear.capstoneorderingapp.models.SaucesModel;
 import com.example.soundoffear.capstoneorderingapp.models.VegetableModel;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.BreadTypeFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.CarrierChooserFragment;
+import com.example.soundoffear.capstoneorderingapp.ordering_fragments.CateringFragments;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.PaidAddsFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.SandwichChoicesFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.SaucesFragment;
@@ -95,6 +98,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_placing);
 
         final FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getApplicationContext());
+        final CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getApplicationContext());
         isSelectedCarrier = false;
         ButterKnife.bind(this);
 
@@ -205,9 +209,23 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             ft.replace(R.id.order_placing_frameLayout, carrierChooserFragment);
                             ft.addToBackStack(null);
                             ft.commit();
+                        } else if (orderType.equals("catering")) {
+                            CateringFragments cateringFragments = new CateringFragments();
+                            ft.replace(R.id.order_placing_frameLayout, cateringFragments);
+                            ft.addToBackStack(null);
+                            ft.commit();
                         }
                     } else {
                         Snackbar.make(order_placing_frameLayout, "Please choose order", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+                if(loadedFragment instanceof CateringFragments) {
+                    CateringFragments cateringFragments = (CateringFragments) fm.findFragmentById(R.id.order_placing_frameLayout);
+                    if(cateringFragments.getCateringModel() != null) {
+                        Intent intent = new Intent(getApplicationContext(), OrderSummaryActivity.class);
+                        cateringOrderDatabase.deleteDatabase(CateringOrderContract.CateringOrderEntry.CATERING_TABLE_NAME);
+                        cateringOrderDatabase.insertCateringToDatabase(cateringFragments.getCateringModel());
+                        startActivity(intent);
                     }
                 }
 

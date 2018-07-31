@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -40,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String USER_DATA_BUNDLE = "user_data_bundle";
 
+    public static final String DATA_FAV = "start_fav_fragment";
+
     private DrawerLayout drawerLayout;
 
     private NavigationView navigationView;
 
-    private String widgetReceivedString;
+    private String intentString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,23 +62,25 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         Intent intent = getIntent();
-        if(intent != null) {
-            widgetReceivedString = intent.getStringExtra(FavoritesWidget.DATA_FAV);
-        }
 
         drawerLayout = findViewById(R.id.nav_drawer_layout);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(widgetReceivedString.equals(Constants.DATABASE_FAVORITES)) {
-            fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }else {
-            fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+        if(intent != null) {
+            intentString = intent.getStringExtra(DATA_FAV);
+            if(!TextUtils.isEmpty(intentString)) {
+                if (intentString.equals(Constants.DATABASE_FAVORITES)) {
+                    fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            } else {
+                fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
         }
 
         navigationView = findViewById(R.id.main_navigationView);

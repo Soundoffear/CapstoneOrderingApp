@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="160dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/circular_layout"
+    android:layout_gravity="center"
+    android:id="@+id/item_catering_background"
+    android:layout_marginTop="8dp">
+
+    <TextView
+        android:id="@+id/catering_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/catering_name_price"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="36dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        tools:text="NAME NAME NAME"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/catering_name_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/catering_name_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/catering_name_currency"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="000.00"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="36dp"/>
+
+    <TextView
+        android:id="@+id/catering_name_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/catering_name_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/catering_name_price"
+        android:text="@string/pln"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="36dp"/>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -77,7 +77,7 @@ public class MainPageFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(Map.Entry<String, Object> data: ((Map<String, Object>) dataSnapshot.getValue()).entrySet()) {
-                    if(!data.getKey().equals("users") || !data.getKey().equals("rewards") || !data.getKey().equals("coupons")) {
+                    if(!data.getKey().equals("users") && !data.getKey().equals("rewards") && !data.getKey().equals("coupons")) {
                         OrderTypeModel orderTypeModel = new OrderTypeModel(data.getKey());
                         orderTypesList.add(orderTypeModel);
                     }

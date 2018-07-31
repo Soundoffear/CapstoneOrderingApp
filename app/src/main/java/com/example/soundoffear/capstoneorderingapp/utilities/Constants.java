@@ -11,4 +11,6 @@ public class Constants {
     public static final String DATABASE_ORDERS = "orders";
     public static final String DATABASE_FAVORITES = "favorites";
 
+    public static final String DATABASE_CATERING = "catering";
+
 }

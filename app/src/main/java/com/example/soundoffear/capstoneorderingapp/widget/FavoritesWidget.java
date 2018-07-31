@@ -33,7 +33,6 @@ public class FavoritesWidget extends AppWidgetProvider {
     RemoteViews remoteViews;
 
     public static final String DATA_TRANSFER = "data_transfer_to_list_view";
-    public static final String DATA_FAV = "start_fav_fragment";
     RemoteViews views;
 
     private RemoteViews updateAppWidgetWithRemoteViews(final Context context, final int appWidgetId, List<String> itemsList) {
@@ -83,7 +82,7 @@ public class FavoritesWidget extends AppWidgetProvider {
                     remoteViews = updateAppWidgetWithRemoteViews(context, appWidgetID, finalItemsList);
 
                     Intent intent1 = new Intent(context, MainActivity.class);
-                    intent1.putExtra(DATA_FAV, Constants.DATABASE_FAVORITES);
+                    intent1.putExtra(MainActivity.DATA_FAV, Constants.DATABASE_FAVORITES);
                     PendingIntent startPendingIntentActivity = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
                     remoteViews.setPendingIntentTemplate(R.id.appwidget_listView, startPendingIntentActivity);
                     appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
