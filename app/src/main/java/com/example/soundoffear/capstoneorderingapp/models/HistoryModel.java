@@ -5,6 +5,8 @@ public class HistoryModel {
     public static final int LABEL_TYPE = 0;
     public static final int SANDWICH_TYPE = 1;
     public static final int DRINK_TYPE = 2;
+    public static final int SIDE_TYPE = 3;
+    public static final int CATERING_TYPE = 4;
 
     //general
     private int type;
@@ -25,7 +27,7 @@ public class HistoryModel {
         this.name = name;
     }
 
-    //drinks constructor
+    //drinks and sides constructor
     public HistoryModel(int type, String name, String price, String quantity) {
         this.type = type;
         this.name = name;
@@ -43,6 +45,13 @@ public class HistoryModel {
         this.paidAddons = paidAddons;
         this.sauces = sauces;
         this.vegetables = vegetables;
+    }
+
+    //catering constructor
+    public HistoryModel(int type, String name, String price) {
+        this.type = type;
+        this.name = name;
+        this.price = price;
     }
 
     public int getType() {

@@ -1,6 +1,5 @@
 package com.example.soundoffear.capstoneorderingapp;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
@@ -21,8 +21,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.contracts.CateringOrderContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.SidesOrderContract;
 import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
+import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.MainPageFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.OrderTypesFragment;
@@ -32,6 +34,7 @@ import com.example.soundoffear.capstoneorderingapp.models.OrderTypeModel;
 import com.example.soundoffear.capstoneorderingapp.models.PaidAddsModel;
 import com.example.soundoffear.capstoneorderingapp.models.SandwichModel;
 import com.example.soundoffear.capstoneorderingapp.models.SaucesModel;
+import com.example.soundoffear.capstoneorderingapp.models.SidesModel;
 import com.example.soundoffear.capstoneorderingapp.models.VegetableModel;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.BreadTypeFragment;
 import com.example.soundoffear.capstoneorderingapp.ordering_fragments.CarrierChooserFragment;
@@ -65,6 +68,8 @@ public class OrderPlacingActivity extends AppCompatActivity {
     public static final String SANDWICH_CARRIER_CHOSEN = "sandwich_carrier_chosen";
 
     public static boolean isOrderingAdditionalSandwich = false;
+    public static boolean isOrderingAdditionalSides = false;
+    public static boolean isOrderingAdditionalCatering = false;
 
     //Strings for holding sandwich data throughout building sandwich by User
     private String carrierChosen;
@@ -100,6 +105,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
         final FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getApplicationContext());
         final CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getApplicationContext());
+        final SidesOrderDatabase sidesOrderDatabase = new SidesOrderDatabase(getApplicationContext());
         isSelectedCarrier = false;
         ButterKnife.bind(this);
 
@@ -122,6 +128,10 @@ public class OrderPlacingActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (isOrderingAdditionalSandwich || FavoritesFragment.isAddingFav) {
             initializeFragment = new CarrierChooserFragment();
+        } else if (isOrderingAdditionalSides) {
+            initializeFragment = new SidesFragment();
+        } else if (isOrderingAdditionalCatering) {
+            initializeFragment = new CateringFragments();
         } else {
             initializeFragment = new OrderTypesFragment();
         }
@@ -225,12 +235,23 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         Snackbar.make(order_placing_frameLayout, "Please choose order", Snackbar.LENGTH_SHORT).show();
                     }
                 }
-                if(loadedFragment instanceof CateringFragments) {
+                if (loadedFragment instanceof CateringFragments) {
                     CateringFragments cateringFragments = (CateringFragments) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    if(cateringFragments.getCateringModel() != null) {
+                    if (cateringFragments.getCateringModel() != null) {
                         Intent intent = new Intent(getApplicationContext(), OrderSummaryActivity.class);
                         cateringOrderDatabase.deleteDatabase(CateringOrderContract.CateringOrderEntry.CATERING_TABLE_NAME);
                         cateringOrderDatabase.insertCateringToDatabase(cateringFragments.getCateringModel());
+                        startActivity(intent);
+                    }
+                }
+
+                if (loadedFragment instanceof SidesFragment) {
+                    SidesFragment sidesFragment = (SidesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
+                    if(sidesFragment.getAllSidesChoosen() != null) {
+                        for(SidesModel sidesModel: sidesFragment.getAllSidesChoosen()) {
+                            sidesOrderDatabase.insertSidesToDB(sidesModel);
+                        }
+                        Intent intent = new Intent(getApplicationContext(), OrderSummaryActivity.class);
                         startActivity(intent);
                     }
                 }

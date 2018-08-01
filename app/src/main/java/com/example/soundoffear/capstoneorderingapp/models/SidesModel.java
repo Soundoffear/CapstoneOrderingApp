@@ -7,6 +7,7 @@ public class SidesModel implements Parcelable {
 
     private String sideName;
     private String sidePrice;
+    private String sideNumber;
 
     private boolean isSideSelected;
 
@@ -19,6 +20,12 @@ public class SidesModel implements Parcelable {
         sideName = in.readString();
         sidePrice = in.readString();
         isSideSelected = in.readByte() != 0;
+    }
+
+    public SidesModel(String sideName, String sidePrice, String sideNumber) {
+        this.sideName = sideName;
+        this.sidePrice = sidePrice;
+        this.sideNumber = sideNumber;
     }
 
     public static final Creator<SidesModel> CREATOR = new Creator<SidesModel>() {
@@ -45,6 +52,10 @@ public class SidesModel implements Parcelable {
         return isSideSelected;
     }
 
+    public String getSideNumber() {
+        return sideNumber;
+    }
+
     public void setSideSelected(boolean sideSelected) {
         isSideSelected = sideSelected;
     }
@@ -63,12 +74,12 @@ public class SidesModel implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null) {
+        if (obj == null) {
             return false;
         }
 
         SidesModel sidesModel = (SidesModel) obj;
-        if(sidesModel.getSideName().equals(this.getSideName())) {
+        if (sidesModel.getSideName().equals(this.getSideName())) {
             return true;
         }
         return false;

@@ -15,8 +15,8 @@ import java.util.List;
 
 public class FinalSandwichDataBase extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "FINAL_SANDWICH";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "FINAL_SANDWICH";
 
     public FinalSandwichDataBase (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

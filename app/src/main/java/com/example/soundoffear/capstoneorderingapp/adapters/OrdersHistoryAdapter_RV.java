@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,12 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
             case HistoryModel.DRINK_TYPE:
                 historyView = LayoutInflater.from(hContext).inflate(R.layout.item_drinks_summary, parent, false);
                 return new OrderHistoryDrinks_ViewHolder(historyView);
+            case HistoryModel.SIDE_TYPE:
+                historyView = LayoutInflater.from(hContext).inflate(R.layout.item_drinks_summary, parent, false);
+                return new OrderHistorySides_ViewHolder(historyView);
+            case HistoryModel.CATERING_TYPE:
+                historyView = LayoutInflater.from(hContext).inflate(R.layout.item_catering_history, parent, false);
+                return new OrderHistoryCatering_ViewHolder(historyView);
         }
 
         return null;
@@ -57,13 +62,14 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                 case HistoryModel.LABEL_TYPE:
                     ((OrderHistoryLabel_ViewHolder) holder).item_history_label_textView.setText(historyModel.getName());
                     break;
+
                 case HistoryModel.SANDWICH_TYPE:
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_name.setText(historyModel.getName());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_carrier.setText(historyModel.getCarrier());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_bread_output.setText(historyModel.getBread());
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_final_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
                     StringBuilder paidStringBuilder = new StringBuilder();
-                    if(!TextUtils.isEmpty(historyModel.getPaidAddons())) {
+                    if (!TextUtils.isEmpty(historyModel.getPaidAddons())) {
                         String[] splittedPaid = historyModel.getPaidAddons().split("-");
                         for (String aSplittedPaid : splittedPaid) {
                             String[] splittedAddOn = aSplittedPaid.split("_");
@@ -74,7 +80,7 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_paid_addons_output.setText(paidStringBuilder.toString());
                     StringBuilder saucesSB = new StringBuilder();
-                    if(!TextUtils.isEmpty(historyModel.getSauces())) {
+                    if (!TextUtils.isEmpty(historyModel.getSauces())) {
                         String[] sauces = historyModel.getSauces().split("_");
                         for (String sauce : sauces) {
                             saucesSB.append(sauce).append(" ");
@@ -84,7 +90,7 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_sauces_output.setText(saucesSB.toString());
                     StringBuilder vegesSB = new StringBuilder();
-                    if(!TextUtils.isEmpty(historyModel.getVegetables())) {
+                    if (!TextUtils.isEmpty(historyModel.getVegetables())) {
                         String[] vegetables = historyModel.getVegetables().split("_");
                         for (String vegetable : vegetables) {
                             vegesSB.append(vegetable).append(" ");
@@ -94,11 +100,24 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                     }
                     ((OrderHistorySandwiches_ViewHolder) holder).item_os_vegetable_output.setText(vegesSB.toString());
                     break;
+
                 case HistoryModel.DRINK_TYPE:
                     ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_name.setText(historyModel.getName());
                     ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
                     ((OrderHistoryDrinks_ViewHolder) holder).ids_drink_value.setText(historyModel.getQuantity());
                     break;
+
+                case HistoryModel.SIDE_TYPE:
+                    ((OrderHistorySides_ViewHolder) holder).ids_drink_name.setText(historyModel.getName());
+                    ((OrderHistorySides_ViewHolder) holder).ids_drink_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
+                    ((OrderHistorySides_ViewHolder) holder).ids_drink_value.setText(historyModel.getQuantity());
+                    break;
+
+                case HistoryModel.CATERING_TYPE:
+                    ((OrderHistoryCatering_ViewHolder) holder).hist_catering_name_tv.setText(historyModel.getName());
+                    ((OrderHistoryCatering_ViewHolder) holder).hist_catering_price.setText(new DecimalFormat("0.00").format(Double.parseDouble(historyModel.getPrice())));
+                    break;
+
             }
         }
     }
@@ -117,6 +136,10 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
                 return HistoryModel.SANDWICH_TYPE;
             case 2:
                 return HistoryModel.DRINK_TYPE;
+            case 3:
+                return HistoryModel.SIDE_TYPE;
+            case 4:
+                return HistoryModel.CATERING_TYPE;
             default:
                 return -1;
         }
@@ -135,9 +158,12 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
 
     class OrderHistoryDrinks_ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.ids_drink_name) TextView ids_drink_name;
-        @BindView(R.id.ids_drink_value) TextView ids_drink_value;
-        @BindView(R.id.ids_drink_price) TextView ids_drink_price;
+        @BindView(R.id.ids_drink_name)
+        TextView ids_drink_name;
+        @BindView(R.id.ids_drink_value)
+        TextView ids_drink_value;
+        @BindView(R.id.ids_drink_price)
+        TextView ids_drink_price;
 
         OrderHistoryDrinks_ViewHolder(View itemView) {
             super(itemView);
@@ -147,13 +173,20 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
 
     class OrderHistorySandwiches_ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.item_os_carrier) TextView item_os_carrier;
-        @BindView(R.id.item_os_name) TextView item_os_name;
-        @BindView(R.id.item_os_bread_output) TextView item_os_bread_output;
-        @BindView(R.id.item_os_vegetable_output) TextView item_os_vegetable_output;
-        @BindView(R.id.item_os_sauces_output) TextView item_os_sauces_output;
-        @BindView(R.id.item_os_paid_addons_output) TextView item_os_paid_addons_output;
-        @BindView(R.id.item_os_final_price) TextView item_os_final_price;
+        @BindView(R.id.item_os_carrier)
+        TextView item_os_carrier;
+        @BindView(R.id.item_os_name)
+        TextView item_os_name;
+        @BindView(R.id.item_os_bread_output)
+        TextView item_os_bread_output;
+        @BindView(R.id.item_os_vegetable_output)
+        TextView item_os_vegetable_output;
+        @BindView(R.id.item_os_sauces_output)
+        TextView item_os_sauces_output;
+        @BindView(R.id.item_os_paid_addons_output)
+        TextView item_os_paid_addons_output;
+        @BindView(R.id.item_os_final_price)
+        TextView item_os_final_price;
 
         OrderHistorySandwiches_ViewHolder(View itemView) {
             super(itemView);
@@ -161,4 +194,31 @@ public class OrdersHistoryAdapter_RV extends RecyclerView.Adapter {
         }
     }
 
+    class OrderHistorySides_ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.ids_drink_name)
+        TextView ids_drink_name;
+        @BindView(R.id.ids_drink_value)
+        TextView ids_drink_value;
+        @BindView(R.id.ids_drink_price)
+        TextView ids_drink_price;
+
+        OrderHistorySides_ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    class OrderHistoryCatering_ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.hist_catering_name_tv)
+        TextView hist_catering_name_tv;
+        @BindView(R.id.hist_catering_name_price)
+        TextView hist_catering_price;
+
+        OrderHistoryCatering_ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }

@@ -16,10 +16,15 @@ import android.widget.TextView;
 import com.example.soundoffear.capstoneorderingapp.OrderPlacingActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.contracts.BuildSandwichContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.CateringOrderContract;
 import com.example.soundoffear.capstoneorderingapp.contracts.DrinksOrderContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.SidesOrderContract;
+import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
+import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.models.OrderTypeModel;
+import com.example.soundoffear.capstoneorderingapp.models.SidesModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
 import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,6 +68,8 @@ public class MainPageFragment extends Fragment {
 
         final FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getContext());
         final DrinksOrderDatabase drinksOrderDatabase = new DrinksOrderDatabase(getContext());
+        final CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getContext());
+        final SidesOrderDatabase sidesOrderDatabase = new SidesOrderDatabase(getContext());
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -135,6 +142,8 @@ public class MainPageFragment extends Fragment {
             public void onClick(View v) {
                 finalSandwichDataBase.deleteTable(BuildSandwichContract.BuildSandwichEntry.SANDWICH_TABLE_NAME);
                 drinksOrderDatabase.deleteDrinkDatabase(DrinksOrderContract.DrinksOrderEntry.DRINKS_ORDER_TABLE_NAME);
+                cateringOrderDatabase.deleteDatabase(CateringOrderContract.CateringOrderEntry.CATERING_TABLE_NAME);
+                sidesOrderDatabase.deleteSidesTable(SidesOrderContract.SidesContractEntry.SIDES_TABLE_NAME);
                 Intent newOrderIntent = new Intent(getContext(), OrderPlacingActivity.class);
                 newOrderIntent.putParcelableArrayListExtra(LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
                 startActivity(newOrderIntent);

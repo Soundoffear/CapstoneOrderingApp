@@ -171,6 +171,15 @@
             fab:fab_size="mini"
             fab:fab_title="Add Sides" />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/order_summary_button_add_catering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccent"
+            fab:fab_size="mini"
+            fab:fab_title="Add Sides" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.constraint.ConstraintLayout>

@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/item_sides_currency"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="0.00" />
+        android:text="@string/zero_pln" />
 
     <TextView
         android:id="@+id/item_sides_currency"

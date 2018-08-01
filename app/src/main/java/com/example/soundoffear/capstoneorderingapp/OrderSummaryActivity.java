@@ -17,13 +17,16 @@ import com.example.soundoffear.capstoneorderingapp.adapters.CateringSummaryAdapt
 import com.example.soundoffear.capstoneorderingapp.adapters.DrinksAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.adapters.DrinksOrderSummaryAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.adapters.FinalSandwichAdapter_RV;
+import com.example.soundoffear.capstoneorderingapp.adapters.SidesSummaryAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
+import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.models.CateringModel;
 import com.example.soundoffear.capstoneorderingapp.models.DrinksModel;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
+import com.example.soundoffear.capstoneorderingapp.models.SidesModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
 import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -65,6 +68,8 @@ public class OrderSummaryActivity extends AppCompatActivity {
     FloatingActionButton fab_add_sandwich;
     @BindView(R.id.order_summary_button_add_sides)
     FloatingActionButton fab_add_sides;
+    @BindView(R.id.order_summary_button_add_catering)
+    FloatingActionButton fab_add_catering;
 
     @BindView(R.id.order_summary_send_order)
     Button order_summary_send_button;
@@ -98,6 +103,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
         FinalSandwichDataBase finalSandwichDataBase = new FinalSandwichDataBase(getApplicationContext());
         DrinksOrderDatabase drinksOrderDatabase = new DrinksOrderDatabase(getApplicationContext());
         CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getApplicationContext());
+        SidesOrderDatabase sidesOrderDatabase = new SidesOrderDatabase(getApplicationContext());
 
         final List<FinalSandwichModel> finalSandwichModelList = finalSandwichDataBase.getAllFinalSandwichData();
         final List<DrinksModel> drinksModelList = drinksOrderDatabase.getAllDrinksData();
@@ -128,18 +134,31 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
 
         final List<CateringModel> cateringModelList = cateringOrderDatabase.getCateringData();
-        Log.d("TEST VALUE", String.valueOf(cateringModelList.size()));
-        if(cateringModelList.size() > 0) {
+        if (cateringModelList.size() > 0) {
             order_summary_catering_recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             order_summary_catering_recyclerView.setLayoutManager(linearLayoutManager);
             CateringSummaryAdapter_RV cateringSummaryAdapter_rv = new CateringSummaryAdapter_RV(getApplicationContext(), cateringModelList);
             order_summary_catering_recyclerView.setAdapter(cateringSummaryAdapter_rv);
-            for(CateringModel cateringModel: cateringModelList) {
+            for (CateringModel cateringModel : cateringModelList) {
                 countTotalPrice = countTotalPrice + Double.parseDouble(cateringModel.getCateringPrice());
             }
         } else {
             order_summary_catering_recyclerView.setVisibility(View.GONE);
+        }
+
+        final List<SidesModel> sidesModelList = sidesOrderDatabase.getAllSides();
+        if(sidesModelList.size() > 0) {
+            order_summary_sides_recyclerView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            order_summary_sides_recyclerView.setLayoutManager(linearLayoutManager);
+            SidesSummaryAdapter_RV sidesSummaryAdapter_rv = new SidesSummaryAdapter_RV(getApplicationContext(), sidesModelList);
+            order_summary_sides_recyclerView.setAdapter(sidesSummaryAdapter_rv);
+            for(SidesModel sidesModel: sidesModelList) {
+                countTotalPrice = countTotalPrice + Double.parseDouble(sidesModel.getSidePrice());
+            }
+        } else {
+            order_summary_sides_recyclerView.setVisibility(View.GONE);
         }
 
         order_summary_total_price_output.setText(new DecimalFormat("0.00").format(countTotalPrice));
@@ -149,6 +168,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
             fab_add_drink.setVisibility(View.GONE);
             fab_add_sides.setVisibility(View.GONE);
             fab_add_sandwich.setVisibility(View.GONE);
+            fab_add_catering.setVisibility(View.GONE);
             order_summary_send_button.setText(getString(R.string.add_to_fav));
 
         } else {
@@ -177,7 +197,19 @@ public class OrderSummaryActivity extends AppCompatActivity {
             fab_add_sides.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "TEST Sides", Toast.LENGTH_SHORT).show();
+                    OrderPlacingActivity.isOrderingAdditionalSides = true;
+                    Intent intent = new Intent(OrderSummaryActivity.this, OrderPlacingActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            fab_add_catering.setIconDrawable(getApplicationContext().getResources().getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
+            fab_add_catering.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OrderPlacingActivity.isOrderingAdditionalCatering = true;
+                    Intent intent = new Intent(OrderSummaryActivity.this, OrderPlacingActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -186,9 +218,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
         order_summary_send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("SENDING DATA", "Sending data");
                 countDrinks = 0;
                 countSubs = 0;
+                countSides = 0;
                 if (FavoritesFragment.isAddingFav) {
                     databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -199,7 +231,6 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                 String[] keySplit = String.valueOf(datas.keySet().toArray()[0]).split(" ");
                                 int keyNumber = Integer.parseInt(keySplit[1]);
                                 favoriteName = "Favorite " + (keyNumber + 1);
-                                Log.d("FAV DATA", favoriteName);
                             }
                             if (TextUtils.isEmpty(favoriteName)) {
                                 favoriteName = "Favorite 1";
@@ -245,18 +276,32 @@ public class OrderSummaryActivity extends AppCompatActivity {
                         }
                     }
 
-                    if(cateringModelList.size() > 0) {
-                        for(int i = 0; i < cateringModelList.size(); i++) {
+                    if (cateringModelList.size() > 0) {
+                        for (int i = 0; i < cateringModelList.size(); i++) {
                             countCatering++;
-                            cateringString = "Catering"+countCatering;
+                            cateringString = "Catering" + countCatering;
                             databaseReference.child(Constants.DATABASE_USERS)
                                     .child(userID)
-                                    .child(Constants.DATABASE_CATERING)
+                                    .child(Constants.DATABASE_ORDERS)
                                     .child(orderNumber)
                                     .child(cateringString)
                                     .setValue(cateringModelList.get(i));
                         }
                     }
+
+                    if (sidesModelList.size() > 0) {
+                        for(int i = 0; i < sidesModelList.size(); i++) {
+                            countSides++;
+                            sidesString = "Sides" + countSides;
+                            databaseReference.child(Constants.DATABASE_USERS)
+                                    .child(userID)
+                                    .child(Constants.DATABASE_ORDERS)
+                                    .child(orderNumber)
+                                    .child(sidesString)
+                                    .setValue(sidesModelList.get(i));
+                        }
+                    }
+
                     PointsSystemClass.addPoints(new DecimalFormat("#").format(Math.round(countTotalPrice)), userID);
                     Intent goToMainPageIntent = new Intent(OrderSummaryActivity.this, MainActivity.class);
                     startActivity(goToMainPageIntent);

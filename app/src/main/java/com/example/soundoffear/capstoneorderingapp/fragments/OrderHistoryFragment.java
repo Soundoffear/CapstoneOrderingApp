@@ -85,6 +85,16 @@ public class OrderHistoryFragment extends Fragment {
                                     subItems.get("paidAddOns"),subItems.get("sauces"), subItems.get("vegetables"));
                             historyModelList.add(historyModel);
                         }
+                        if(item.contains("Sides")){
+                            Map<String, String> sideItems = (Map<String, String>) orderItem.getValue();
+                            historyModel = new HistoryModel(HistoryModel.SIDE_TYPE, sideItems.get("sideName"), sideItems.get("sidePrice"), sideItems.get("sideNumber"));
+                            historyModelList.add(historyModel);
+                        }
+                        if(item.contains("Catering")) {
+                            Map<String, String> cateringItems = (Map<String, String>) orderItem.getValue();
+                            historyModel = new HistoryModel(HistoryModel.CATERING_TYPE, cateringItems.get("cateringName"), cateringItems.get("cateringPrice"));
+                            historyModelList.add(historyModel);
+                        }
                     }
                 }
                 for(int i = 0; i < historyModelList.size(); i++) {

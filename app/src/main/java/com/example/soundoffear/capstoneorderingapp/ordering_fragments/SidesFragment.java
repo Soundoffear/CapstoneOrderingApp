@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.adapters.SidesAdapter_RV;
@@ -33,6 +34,8 @@ public class SidesFragment extends Fragment implements OnSidesSelectedListener {
     RecyclerView sides_recyclerView;
 
     private List<SidesModel> sidesModelList;
+
+    private SidesModel sidesModel;
 
     @Nullable
     @Override
@@ -70,6 +73,22 @@ public class SidesFragment extends Fragment implements OnSidesSelectedListener {
 
     @Override
     public void onSidesSelected(SidesModel sidesModel, int value) {
+        this.sidesModel = sidesModel;
+    }
 
+    public List<SidesModel> getAllSidesChoosen() {
+        int itemCountsRV = sides_recyclerView.getAdapter().getItemCount();
+        List<SidesModel> sidesModels = new ArrayList<>();
+        for(int i =0;i<itemCountsRV;i++) {
+            String sideNumber = ((TextView) sides_recyclerView.getChildAt(i).findViewById(R.id.item_sides_number_ordered)).getText().toString();
+            double sideDoubleNumber = Double.parseDouble(sideNumber);
+            if(sideDoubleNumber > 0) {
+                String sideName = ((TextView) sides_recyclerView.getChildAt(i).findViewById(R.id.item_sides_name)).getText().toString();
+                String sidePrice = ((TextView) sides_recyclerView.getChildAt(i).findViewById(R.id.item_sides_price)).getText().toString();
+                SidesModel sidesModel = new SidesModel(sideName, sidePrice, sideNumber);
+                sidesModels.add(sidesModel);
+            }
+        }
+        return sidesModels;
     }
 }
