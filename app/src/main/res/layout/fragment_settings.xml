@@ -17,4 +17,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
+    <TextView
+        android:id="@+id/settings_small_warrning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:text="@string/only_one_address_provided"
+        app:layout_constraintTop_toBottomOf="@+id/settings_TextView"
+        app:layout_constraintRight_toRightOf="@+id/settings_TextView"
+        app:layout_constraintLeft_toLeftOf="@+id/settings_TextView"/>
+
+    <Spinner
+        android:id="@+id/settings_address_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/addresses"
+        style="@style/normal_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/settings_TextView"
+        app:layout_constraintLeft_toLeftOf="@+id/settings_TextView"
+        app:layout_constraintRight_toRightOf="@+id/settings_TextView"/>
+
+    <include layout="@layout/fragment_user_data_additional_address_output"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/settings_TextView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="56dp"/>
+
 </android.support.constraint.ConstraintLayout>

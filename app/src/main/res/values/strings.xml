@@ -66,4 +66,5 @@
     <string name="enter_e_mail">Enter e-mail</string>
     <string name="add_another_address">Add another address</string>
     <string name="delivery_address_2">Delivery Address 2</string>
+    <string name="only_one_address_provided">(only one address provided)</string>
 </resources>
