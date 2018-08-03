@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.contracts.CateringOrderContract;
-import com.example.soundoffear.capstoneorderingapp.contracts.SidesOrderContract;
 import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
@@ -257,8 +256,8 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 }
 
                 if (loadedFragment instanceof CarrierChooserFragment) {
-                    /** Load SandwichChoicesFragment if CarrierChooserFragment has been previously loaded
-                     * if carrier is not chosen then SnackBar will inform user **/
+                    /* Load SandwichChoicesFragment if CarrierChooserFragment has been previously loaded
+                      if carrier is not chosen then SnackBar will inform user **/
                     CarrierChooserFragment carrierChooserFragment = ((CarrierChooserFragment) fm.findFragmentById(R.id.order_placing_frameLayout));
                     if (carrierChooserFragment.getSelectedCarrier() != null) {
                         carrierChosen = carrierChooserFragment.getSelectedCarrier();
@@ -275,7 +274,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     }
                 }
                 if (loadedFragment instanceof SandwichChoicesFragment) {
-                    /** Load BreadTypeFragment if SandwichChoicesFragment has been previously loaded **/
+                    /* Load BreadTypeFragment if SandwichChoicesFragment has been previously loaded **/
                     SandwichChoicesFragment sandwichChoicesFragment = (SandwichChoicesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     if (sandwichChoicesFragment.getSandwichModelSelected() != null) {
                         sandwichChosen = sandwichChoicesFragment.getSandwichModelSelected().getSandwichName();
@@ -303,7 +302,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     }
                 }
                 if (loadedFragment instanceof BreadTypeFragment) {
-                    /** Load VegetableFragment if BreadTypeFragment has been previously loaded **/
+                    /* Load VegetableFragment if BreadTypeFragment has been previously loaded **/
                     BreadTypeFragment breadTypeFragment = (BreadTypeFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     if (breadTypeFragment.breadModelSelected != null) {
                         breadChosen = breadTypeFragment.getBreadType();

@@ -1,5 +1,7 @@
 package com.example.soundoffear.capstoneorderingapp.fragments;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,13 +15,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 
 import com.example.soundoffear.capstoneorderingapp.OrderPlacingActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.adapters.FavoritesAdapter_RecyclerView;
 import com.example.soundoffear.capstoneorderingapp.contracts.BuildSandwichContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.CateringOrderContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.DrinksOrderContract;
+import com.example.soundoffear.capstoneorderingapp.contracts.SidesOrderContract;
+import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
+import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
+import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
+import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +56,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
 
     private List<FinalSandwichModel> finalSandwichModelList;
     FinalSandwichDataBase finalSandwichDataBase;
+    DrinksOrderDatabase drinksOrderDatabase;
+    SidesOrderDatabase sidesOrderDatabase;
+    CateringOrderDatabase cateringOrderDatabase;
 
     @Nullable
     @Override
@@ -55,6 +68,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
         finalSandwichModelList = new ArrayList<>();
 
         finalSandwichDataBase = new FinalSandwichDataBase(getContext());
+        drinksOrderDatabase = new DrinksOrderDatabase(getContext());
+        sidesOrderDatabase = new SidesOrderDatabase(getContext());
+        cateringOrderDatabase = new CateringOrderDatabase(getContext());
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
@@ -83,6 +99,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
                     }
                     FavoritesAdapter_RecyclerView favoritesAdapter_recyclerView = new FavoritesAdapter_RecyclerView(getContext(), finalSandwichModelList);
                     favorites_recyclerView.setAdapter(favoritesAdapter_recyclerView);
+
                 }
             }
 
@@ -101,6 +118,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         isAddingFav = true;
         finalSandwichDataBase.deleteTable(BuildSandwichContract.BuildSandwichEntry.SANDWICH_TABLE_NAME);
+        drinksOrderDatabase.deleteDrinkDatabase(DrinksOrderContract.DrinksOrderEntry.DRINKS_ORDER_TABLE_NAME);
+        sidesOrderDatabase.deleteSidesTable(SidesOrderContract.SidesContractEntry.SIDES_TABLE_NAME);
+        cateringOrderDatabase.deleteDatabase(CateringOrderContract.CateringOrderEntry.CATERING_TABLE_NAME);
         Intent intentToAddToFavs = new Intent(getActivity(), OrderPlacingActivity.class);
         startActivity(intentToAddToFavs);
     }

@@ -144,6 +144,7 @@ public class MainPageFragment extends Fragment {
                 drinksOrderDatabase.deleteDrinkDatabase(DrinksOrderContract.DrinksOrderEntry.DRINKS_ORDER_TABLE_NAME);
                 cateringOrderDatabase.deleteDatabase(CateringOrderContract.CateringOrderEntry.CATERING_TABLE_NAME);
                 sidesOrderDatabase.deleteSidesTable(SidesOrderContract.SidesContractEntry.SIDES_TABLE_NAME);
+                FavoritesFragment.isAddingFav = false;
                 Intent newOrderIntent = new Intent(getContext(), OrderPlacingActivity.class);
                 newOrderIntent.putParcelableArrayListExtra(LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
                 startActivity(newOrderIntent);

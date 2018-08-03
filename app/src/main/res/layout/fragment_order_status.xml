@@ -1,17 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background">
 
     <TextView
-        android:id="@+id/order_status_textview"
+        android:id="@+id/order_status_order_number_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Order Status Fragment"
+        style="@style/normal_text_style"
+        android:text="@string/order_number"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/order_status_order_number"/>
+
+    <TextView
+        android:id="@+id/order_status_order_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/normal_text_style"
+        tools:text="ORDER NUMBER X X X X X X X X X X X X X"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/order_status_order_number_label"
+        app:layout_constraintBottom_toTopOf="@+id/order_status_received"/>
+
+    <TextView
+        android:id="@+id/order_status_received"
+        style="@style/normal_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/order_received"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/order_status_order_circle"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:background="@drawable/border_layout"/>
+
+    <TextView
+        android:id="@+id/order_status_in_the_making"
+        style="@style/normal_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/in_the_making"
+        android:padding="8dp"
+        android:background="@drawable/border_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/order_status_order_circle"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/order_status_out_for_delivery"
+        style="@style/normal_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/out_for_delivery"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_status_order_circle"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:background="@drawable/border_layout"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/order_status_delivered"
+        style="@style/normal_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delivered"
+        android:padding="8dp"
+        android:background="@drawable/border_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/order_status_order_circle"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/order_status_order_circle"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/circular_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -12,6 +12,24 @@ public class UserDataModel implements Parcelable {
     private String userAddressStreet;
     private String userAddressNumber;
     private String userAddressCity;
+    private String userAddressStreet2;
+    private String userAddressNumber2;
+    private String userAddressCity2;
+
+    public UserDataModel(String userName, String userSurname, String userPhone, String userEmail,
+                         String userAddressStreet, String userAddressNumber, String userAddressCity,
+                         String userAddressStreet2, String userAddressNumber2, String userAddressCity2) {
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userAddressStreet = userAddressStreet;
+        this.userAddressNumber = userAddressNumber;
+        this.userAddressCity = userAddressCity;
+        this.userAddressStreet2 = userAddressStreet2;
+        this.userAddressNumber2 = userAddressNumber2;
+        this.userAddressCity2 = userAddressCity2;
+    }
 
     public UserDataModel(String userName, String userSurname, String userPhone, String userEmail, String userAddressStreet, String userAddressNumber, String userAddressCity) {
         this.userName = userName;
@@ -71,6 +89,18 @@ public class UserDataModel implements Parcelable {
 
     public String getUserAddressCity() {
         return userAddressCity;
+    }
+
+    public String getUserAddressStreet2() {
+        return userAddressStreet2;
+    }
+
+    public String getUserAddressNumber2() {
+        return userAddressNumber2;
+    }
+
+    public String getUserAddressCity2() {
+        return userAddressCity2;
     }
 
     @Override

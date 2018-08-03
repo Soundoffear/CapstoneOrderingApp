@@ -86,6 +86,10 @@ public class RewardRedeemerFragment extends Fragment implements View.OnClickList
                 double pinReceived = Double.parseDouble(rr_pin_enter.getText().toString());
                 if(pinReceived == pin_match_value) {
                     PointsSystemClass.removePoints(receivedRewardModel.getRewardValue(), userID);
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_frameLayout, new RewardRedeemerFragment())
+                            .commit();
                 }
             }
         }

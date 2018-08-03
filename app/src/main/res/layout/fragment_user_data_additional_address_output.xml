@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/user_data_user_delivery_address_label_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delivery_address_2"
+        android:textStyle="bold"
+        style="@style/normal_text_style"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/user_data_user_delivery_address_street_output_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/normal_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/user_data_user_delivery_address_label_2"
+        app:layout_constraintRight_toRightOf="@+id/user_data_user_delivery_address_label_2"
+        tools:text="@string/street"
+        app:layout_constraintLeft_toLeftOf="@+id/user_data_user_delivery_address_label_2"/>
+
+    <TextView
+        android:id="@+id/user_data_user_delivery_address_number_output_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/number"
+        style="@style/normal_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/user_data_user_delivery_address_street_output_2"
+        app:layout_constraintLeft_toLeftOf="@+id/user_data_user_delivery_address_label_2"
+        app:layout_constraintRight_toRightOf="@+id/user_data_user_delivery_address_label_2"/>
+
+    <TextView
+        android:id="@+id/user_data_user_delivery_address_city_output_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/city"
+        style="@style/normal_text_style"
+        app:layout_constraintTop_toBottomOf="@+id/user_data_user_delivery_address_number_output_2"
+        app:layout_constraintLeft_toLeftOf="@+id/user_data_user_delivery_address_label_2"
+        app:layout_constraintRight_toRightOf="@+id/user_data_user_delivery_address_label_2"/>
+
+</android.support.constraint.ConstraintLayout>

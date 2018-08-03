@@ -54,4 +54,16 @@
     <string name="selected_reward_to_redeem">Selected reward to redeem</string>
     <string name="redeem_award">Redeem Award</string>
     <string name="enter_pin">enter pin</string>
+    <string name="order_received">Order Received</string>
+    <string name="in_the_making">In The Making</string>
+    <string name="out_for_delivery">Out For Delivery</string>
+    <string name="delivered">Order Delivered</string>
+    <string name="order_number">ORDER NUMBER</string>
+    <string name="set_default_address">Set Default Address</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_surname">Enter surname</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="enter_e_mail">Enter e-mail</string>
+    <string name="add_another_address">Add another address</string>
+    <string name="delivery_address_2">Delivery Address 2</string>
 </resources>

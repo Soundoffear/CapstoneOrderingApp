@@ -14,4 +14,10 @@ public class Constants {
     public static final String DATABASE_CATERING = "catering";
     public static final String DATABASE_SIDES = "sides";
 
+    public static final String DATABASE_ORDER_STATUS = "order_status";
+    public static final String DATABASE_ORDER_RECEIVED = "order_received";
+    public static final String DATABASE_ORDER_IN_THE_MAKING = "in_the_making";
+    public static final String DATABASE_IN_DELIVERY = "in_delivery";
+    public static final String DATABASE_DELIVERED = "delivered";
+
 }

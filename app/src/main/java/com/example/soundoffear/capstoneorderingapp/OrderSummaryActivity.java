@@ -1,7 +1,9 @@
 package com.example.soundoffear.capstoneorderingapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +50,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OrderSummaryActivity extends AppCompatActivity {
+
+    public static final String LAST_ORDER_SAVED = "last_order_value";
 
     @BindView(R.id.order_summary_recyclerView)
     RecyclerView order_summary_recyclerView;
@@ -148,13 +152,13 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
 
         final List<SidesModel> sidesModelList = sidesOrderDatabase.getAllSides();
-        if(sidesModelList.size() > 0) {
+        if (sidesModelList.size() > 0) {
             order_summary_sides_recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             order_summary_sides_recyclerView.setLayoutManager(linearLayoutManager);
             SidesSummaryAdapter_RV sidesSummaryAdapter_rv = new SidesSummaryAdapter_RV(getApplicationContext(), sidesModelList);
             order_summary_sides_recyclerView.setAdapter(sidesSummaryAdapter_rv);
-            for(SidesModel sidesModel: sidesModelList) {
+            for (SidesModel sidesModel : sidesModelList) {
                 countTotalPrice = countTotalPrice + Double.parseDouble(sidesModel.getSidePrice());
             }
         } else {
@@ -239,8 +243,10 @@ public class OrderSummaryActivity extends AppCompatActivity {
                             databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").child(favoriteName).setValue(finalSandwichModelList.get(0));
                             Toast.makeText(getApplicationContext(), "Item added to Favorites", Toast.LENGTH_SHORT).show();
 
+
                             Intent intentToStartMainActivity = new Intent(OrderSummaryActivity.this, MainActivity.class);
                             startActivity(intentToStartMainActivity);
+
                         }
 
                         @Override
@@ -248,6 +254,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
                         }
                     });
+
                 } else {
                     String orderNumber = String.valueOf(new Date(System.currentTimeMillis()));
                     if (drinksModelList.size() > 1) {
@@ -261,6 +268,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                     .child(drinksString)
                                     .setValue(drinksModelList.get(i));
                         }
+                        databaseReference.child(Constants.DATABASE_USERS)
+                                .child(userID)
+                                .child(Constants.DATABASE_ORDERS)
+                                .child(orderNumber)
+                                .child(Constants.DATABASE_ORDER_STATUS)
+                                .setValue(Constants.DATABASE_ORDER_RECEIVED);
                     }
 
                     if (finalSandwichModelList.size() > 0) {
@@ -274,6 +287,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                     .child(subsString)
                                     .setValue(finalSandwichModelList.get(i));
                         }
+                        databaseReference.child(Constants.DATABASE_USERS)
+                                .child(userID)
+                                .child(Constants.DATABASE_ORDERS)
+                                .child(orderNumber)
+                                .child(Constants.DATABASE_ORDER_STATUS)
+                                .setValue(Constants.DATABASE_ORDER_RECEIVED);
                     }
 
                     if (cateringModelList.size() > 0) {
@@ -287,10 +306,16 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                     .child(cateringString)
                                     .setValue(cateringModelList.get(i));
                         }
+                        databaseReference.child(Constants.DATABASE_USERS)
+                                .child(userID)
+                                .child(Constants.DATABASE_ORDERS)
+                                .child(orderNumber)
+                                .child(Constants.DATABASE_ORDER_STATUS)
+                                .setValue(Constants.DATABASE_ORDER_RECEIVED);
                     }
 
                     if (sidesModelList.size() > 0) {
-                        for(int i = 0; i < sidesModelList.size(); i++) {
+                        for (int i = 0; i < sidesModelList.size(); i++) {
                             countSides++;
                             sidesString = "Sides" + countSides;
                             databaseReference.child(Constants.DATABASE_USERS)
@@ -300,11 +325,20 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                     .child(sidesString)
                                     .setValue(sidesModelList.get(i));
                         }
+                        databaseReference.child(Constants.DATABASE_USERS)
+                                .child(userID)
+                                .child(Constants.DATABASE_ORDERS)
+                                .child(orderNumber)
+                                .child(Constants.DATABASE_ORDER_STATUS)
+                                .setValue(Constants.DATABASE_ORDER_RECEIVED);
                     }
 
                     PointsSystemClass.addPoints(new DecimalFormat("#").format(Math.round(countTotalPrice)), userID);
                     Intent goToMainPageIntent = new Intent(OrderSummaryActivity.this, MainActivity.class);
                     startActivity(goToMainPageIntent);
+
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                    sharedPreferences.edit().putString(LAST_ORDER_SAVED, orderNumber).apply();
                 }
             }
         });

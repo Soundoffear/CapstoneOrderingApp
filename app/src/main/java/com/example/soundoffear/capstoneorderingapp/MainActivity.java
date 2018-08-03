@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(intent != null) {
+        if (intent != null) {
             intentString = intent.getStringExtra(DATA_FAV);
-            if(!TextUtils.isEmpty(intentString)) {
+            if (!TextUtils.isEmpty(intentString)) {
                 if (intentString.equals(Constants.DATABASE_FAVORITES)) {
                     fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
                     fragmentTransaction.addToBackStack(null);
@@ -115,21 +115,33 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.delivery_address:
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         final String userID = firebaseUser.getUid();
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userID).child("user_data");
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child("user_data");
                         databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                //UserDataModel userDataModel = dataSnapshot.getValue(UserDataModel.class);
-                                if(dataSnapshot.getValue() != null) {
-                                    Log.d("TEST USER", ((Map<String, Object>) dataSnapshot.getValue()).get("userName").toString());
+                                if (dataSnapshot.getValue() != null) {
                                     Map<String, Object> userData = (Map<String, Object>) dataSnapshot.getValue();
-                                    UserDataModel userDataModel = new UserDataModel(userData.get("userName").toString(),
-                                            userData.get("userSurname").toString(),
-                                            userData.get("userPhone").toString(),
-                                            userData.get("userEmail").toString(),
-                                            userData.get("userAddressStreet").toString(),
-                                            userData.get("userAddressNumber").toString(),
-                                            userData.get("userAddressCity").toString());
+                                    UserDataModel userDataModel;
+                                    if (TextUtils.isEmpty(userData.get("userAddressStreet2").toString())) {
+                                        userDataModel = new UserDataModel(userData.get("userName").toString(),
+                                                userData.get("userSurname").toString(),
+                                                userData.get("userPhone").toString(),
+                                                userData.get("userEmail").toString(),
+                                                userData.get("userAddressStreet").toString(),
+                                                userData.get("userAddressNumber").toString(),
+                                                userData.get("userAddressCity").toString());
+                                    } else {
+                                        userDataModel = new UserDataModel(userData.get("userName").toString(),
+                                                userData.get("userSurname").toString(),
+                                                userData.get("userPhone").toString(),
+                                                userData.get("userEmail").toString(),
+                                                userData.get("userAddressStreet").toString(),
+                                                userData.get("userAddressNumber").toString(),
+                                                userData.get("userAddressCity").toString(),
+                                                userData.get("userAddressStreet2").toString(),
+                                                userData.get("userAddressNumber2").toString(),
+                                                userData.get("userAddressCity2").toString());
+                                    }
                                     Bundle userBundle = new Bundle();
                                     userBundle.putParcelable(USER_DATA_BUNDLE, userDataModel);
 
@@ -138,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, userDataOutputFragment).addToBackStack(null).commit();
 
                                 } else {
-                                    Log.d("USER TEST DATA", "dataSnapshot empty");
                                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new DeliveryAddressEntryFragment()).addToBackStack(null).commit();
 
                                 }
@@ -164,17 +175,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBackStackChanged() {
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_frameLayout);
-                if(f instanceof MainPageFragment) {
+                if (f instanceof MainPageFragment) {
                     setSelectedNavDrawerItem(R.id.main_screen);
-                } else if(f instanceof CouponsAndPromosFragment) {
+                } else if (f instanceof CouponsAndPromosFragment) {
                     setSelectedNavDrawerItem(R.id.coupons_and_promo);
-                } else if(f instanceof OrderHistoryFragment) {
+                } else if (f instanceof OrderHistoryFragment) {
                     setSelectedNavDrawerItem(R.id.order_history);
-                } else if(f instanceof FavoritesFragment) {
+                } else if (f instanceof FavoritesFragment) {
                     setSelectedNavDrawerItem(R.id.favorites);
-                } else if(f instanceof RedeemRewardsFragment) {
+                } else if (f instanceof RedeemRewardsFragment) {
                     setSelectedNavDrawerItem(R.id.redeem_rewards);
-                } else if(f instanceof OrderStatusFragment) {
+                } else if (f instanceof OrderStatusFragment) {
                     setSelectedNavDrawerItem(R.id.order_status);
                 } else if (f instanceof DeliveryAddressEntryFragment) {
                     setSelectedNavDrawerItem(R.id.delivery_address);

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.soundoffear.capstoneorderingapp.MainActivity;
@@ -60,7 +59,7 @@ public class FavoritesWidget extends AppWidgetProvider {
                 .child(userID)
                 .child(Constants.DATABASE_FAVORITES);
         final List<String> finalItemsList = new ArrayList<>();
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, Object> favourites = (Map<String, Object>) dataSnapshot.getValue();
