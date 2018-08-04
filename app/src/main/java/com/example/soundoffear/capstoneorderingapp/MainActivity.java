@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -96,25 +96,33 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.main_screen:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new MainPageFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("New Order");
                         break;
                     case R.id.coupons_and_promo:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new CouponsAndPromosFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("Coupons and Promo");
                         break;
                     case R.id.order_history:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderHistoryFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("Order History");
                         break;
                     case R.id.favorites:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new FavoritesFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("Favorites");
                         break;
                     case R.id.redeem_rewards:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RedeemRewardsFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("Redeem Rewards");
                         break;
                     case R.id.order_status:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new OrderStatusFragment()).addToBackStack(null).commit();
+                        actionBar.setTitle("Order Status");
                         break;
                     case R.id.delivery_address:
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         final String userID = firebaseUser.getUid();
+
+                        actionBar.setTitle("User Data");
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child("user_data");
                         databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -164,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.settings:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new SettingsFragment()).addToBackStack(null).commit();
+
+                        actionBar.setTitle("Settings");
                         break;
                 }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,28 +43,29 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
         holder.item_os_bread.setText(finalSandwichModel.getBread());
         String[] vegetables = finalSandwichModel.getVegetables().split("_");
         StringBuilder vegesSpace = new StringBuilder();
-        for(String vegetable: vegetables) {
+        for (String vegetable : vegetables) {
             vegesSpace.append(vegetable).append(" ");
         }
         holder.item_os_vegetable.setText(brokenDownData(vegesSpace.toString()));
         String[] sauces = finalSandwichModel.getSauces().split("_");
         StringBuilder saucesSpace = new StringBuilder();
-        for(String sauce: sauces) {
+        for (String sauce : sauces) {
             saucesSpace.append(sauce).append(" ");
         }
         holder.item_os_sauces.setText(saucesSpace.toString());
         String[] paidSplitted = finalSandwichModel.getPaidAddOns().split("-");
         StringBuilder paidBuilder = new StringBuilder();
-        for(String paidAddOn: paidSplitted) {
+        for (String paidAddOn : paidSplitted) {
             String[] paidAddOnSplitted = paidAddOn.split("_");
-            if(paidAddOnSplitted.length > 1) {
+            if (paidAddOnSplitted.length > 1) {
                 paidBuilder.append(paidAddOnSplitted[0]).append(" ").append("x").append(" ").append(paidAddOnSplitted[1]).append(" ").append("-").append(" ").append(paidAddOnSplitted[2]).append("\n");
             } else {
                 paidBuilder.append("brak");
             }
         }
         holder.item_os_paid_addons.setText(paidBuilder);
-        holder.item_os_final_price.setText(finalSandwichModel.getFinalPrice());
+        double finalPrice = Double.parseDouble(finalSandwichModel.getFinalPrice());
+        holder.item_os_final_price.setText(new DecimalFormat("0.00").format(finalPrice));
 
     }
 
@@ -74,13 +76,20 @@ public class FinalSandwichAdapter_RV extends RecyclerView.Adapter<FinalSandwichA
 
     class FinalSandwich_ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.item_os_carrier) TextView item_os_carrier;
-        @BindView(R.id.item_os_name) TextView item_os_sandwich_name;
-        @BindView(R.id.item_os_bread_output) TextView item_os_bread;
-        @BindView(R.id.item_os_vegetable_output) TextView item_os_vegetable;
-        @BindView(R.id.item_os_sauces_output) TextView item_os_sauces;
-        @BindView(R.id.item_os_paid_addons_output) TextView item_os_paid_addons;
-        @BindView(R.id.item_os_final_price) TextView item_os_final_price;
+        @BindView(R.id.item_os_carrier)
+        TextView item_os_carrier;
+        @BindView(R.id.item_os_name)
+        TextView item_os_sandwich_name;
+        @BindView(R.id.item_os_bread_output)
+        TextView item_os_bread;
+        @BindView(R.id.item_os_vegetable_output)
+        TextView item_os_vegetable;
+        @BindView(R.id.item_os_sauces_output)
+        TextView item_os_sauces;
+        @BindView(R.id.item_os_paid_addons_output)
+        TextView item_os_paid_addons;
+        @BindView(R.id.item_os_final_price)
+        TextView item_os_final_price;
 
         FinalSandwich_ViewHolder(View itemView) {
             super(itemView);

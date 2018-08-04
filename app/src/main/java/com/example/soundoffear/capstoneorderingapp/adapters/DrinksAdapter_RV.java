@@ -1,7 +1,6 @@
 package com.example.soundoffear.capstoneorderingapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,7 +23,6 @@ public class DrinksAdapter_RV extends RecyclerView.Adapter implements OnDrinksSe
     private List<DrinksModel> drinksModelList;
     private OnDrinksSelectedListener onDrinksSelectedListener;
     private boolean isMultiSelectable;
-    private int valueNumber;
 
     public DrinksAdapter_RV(Context context, List<DrinksModel> drinksModelList, OnDrinksSelectedListener drinksSelectedListener, boolean isMultiSelectable) {
         this.context = context;
@@ -44,7 +42,7 @@ public class DrinksAdapter_RV extends RecyclerView.Adapter implements OnDrinksSe
                 return new DrinksFamilyViewHolder(view);
             case DrinksModel.DRINK_TYPE:
                 view = LayoutInflater.from(context).inflate(R.layout.item_drinks, parent, false);
-                return new DrinksViewHolder(view, this, context);
+                return new DrinksViewHolder(view, context);
         }
         return null;
     }
@@ -132,7 +130,6 @@ public class DrinksAdapter_RV extends RecyclerView.Adapter implements OnDrinksSe
     @Override
     public void onDrinksSelected(DrinksModel drinksModel, int value) {
         Log.d("DRINKS RV", drinksModel.getName() + " " + value);
-        valueNumber = value;
         if(!isMultiSelectable) {
             for(DrinksModel d_model: drinksModelList) {
                 if(!d_model.equals(drinksModel) && d_model.isSelected()) {

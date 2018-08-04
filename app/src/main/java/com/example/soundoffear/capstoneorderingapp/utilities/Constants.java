@@ -20,4 +20,6 @@ public class Constants {
     public static final String DATABASE_IN_DELIVERY = "in_delivery";
     public static final String DATABASE_DELIVERED = "delivered";
 
+    public static final String DATABASE_LAST_ORDER = "last_order";
+
 }

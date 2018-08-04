@@ -14,7 +14,7 @@ public class DrinksFamilyViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.item_drinks_family_view_holder)
     TextView item_drinks_family_view_holder;
 
-    public DrinksFamilyViewHolder(View itemView) {
+    DrinksFamilyViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
@@ -21,7 +20,7 @@ public class SandwichSelected_ViewHolder extends RecyclerView.ViewHolder impleme
 
     private OnSandwichSelectedListener onSandwichSelectedListener;
     SandwichModel sandwichModel;
-    Context mContext;
+    private Context mContext;
 
     @BindView(R.id.sandwich_item_checkbox)
     TextView sandwich_checkbox;
@@ -55,9 +54,9 @@ public class SandwichSelected_ViewHolder extends RecyclerView.ViewHolder impleme
 
     public void setSelected(boolean isSelected) {
         if(isSelected) {
-            sandwich_item_background.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+            sandwich_item_background.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout_selected));
         } else {
-            sandwich_item_background.setBackgroundColor(mContext.getResources().getColor(R.color.background));
+            sandwich_item_background.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout));
         }
         sandwichModel.setSelected(isSelected);
     }

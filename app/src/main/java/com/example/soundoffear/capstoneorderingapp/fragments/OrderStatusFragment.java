@@ -47,18 +47,32 @@ public class OrderStatusFragment extends Fragment {
         View orderStatusView = inflater.inflate(R.layout.fragment_order_status, container, false);
         ButterKnife.bind(this, orderStatusView);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        final String lastOrder = sharedPreferences.getString(OrderSummaryActivity.LAST_ORDER_SAVED, "");
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child(Constants.DATABASE_ORDERS);
+        final String[] lastOrder = new String[1];
+
+        DatabaseReference dataReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child(Constants.DATABASE_LAST_ORDER);
+        dataReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lastOrder[0] = String.valueOf(dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child(Constants.DATABASE_ORDERS);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, Object> orderObject = (Map<String, Object>) dataSnapshot.getValue();
                 for (Map.Entry<String, Object> order : orderObject.entrySet()) {
-                    if (order.getKey().equals(lastOrder)) {
+                    Log.d("TEST STATUS", lastOrder[0] + " " + order.getKey());
+                    if (order.getKey().equals(lastOrder[0])) {
                         order_status_order_number.setText(order.getKey());
                         Log.d("ORDER IN", "ORDER HAS BEEN RECEIVED");
                         Map<String, Object> detailedObject = (Map<String, Object>) order.getValue();

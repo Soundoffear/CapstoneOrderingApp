@@ -17,7 +17,7 @@ public class CateringAdapter_RV extends RecyclerView.Adapter<CateringViewHolder>
 
     private Context cateringContext;
     private List<CateringModel> cateringModelList;
-    OnCateringItemSelectedListener onCateringItemSelectedListener;
+    private OnCateringItemSelectedListener onCateringItemSelectedListener;
     private boolean isMultiSelectable;
 
     public CateringAdapter_RV(Context cateringContext, List<CateringModel> cateringModelList, OnCateringItemSelectedListener onCateringItemSelectedListener, boolean isMultiSelectable) {

@@ -28,7 +28,7 @@ public class OrderType_ViewHolder extends RecyclerView.ViewHolder implements Vie
     private Context orderContext;
     OrderTypeModel orderTypeModel;
 
-    public OrderType_ViewHolder(View itemView, OnOrderTypeSelectedListener orderTypeSelectedListener, Context context) {
+    OrderType_ViewHolder(View itemView, OnOrderTypeSelectedListener orderTypeSelectedListener, Context context) {
         super(itemView);
         this.orderContext = context;
         ButterKnife.bind(this, itemView);

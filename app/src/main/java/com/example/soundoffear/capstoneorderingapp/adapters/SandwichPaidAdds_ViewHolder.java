@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
-import com.example.soundoffear.capstoneorderingapp.interfaces.OnPaidAddsSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.models.PaidAddsModel;
 
 import butterknife.BindView;
@@ -21,7 +20,6 @@ public class SandwichPaidAdds_ViewHolder extends RecyclerView.ViewHolder impleme
 
     private Context paidContext;
     PaidAddsModel paidAddsModel;
-    private OnPaidAddsSelectedListener onPaidAddsSelectedListener;
 
     @BindView(R.id.paid_adds_background)
     ConstraintLayout paid_adds_background;
@@ -37,25 +35,24 @@ public class SandwichPaidAdds_ViewHolder extends RecyclerView.ViewHolder impleme
     TextView paid_adds_price_tv;
     @BindView(R.id.paid_adds_name_textView) TextView paid_adds_name_tv;
 
-    SandwichPaidAdds_ViewHolder(View itemView, OnPaidAddsSelectedListener listener, Context context) {
+    SandwichPaidAdds_ViewHolder(View itemView, Context context) {
         super(itemView);
         this.paidContext = context;
         ButterKnife.bind(this, itemView);
-        this.onPaidAddsSelectedListener = listener;
         itemView.setOnClickListener(this);
     }
 
     public void setSelected(int value) {
         if(isMoreThanZero(value)) {
-            paid_adds_background.setBackgroundColor(paidContext.getResources().getColor(R.color.colorAccent));
+            paid_adds_background.setBackgroundDrawable(paidContext.getResources().getDrawable(R.drawable.border_layout_selected));
         } else {
-            paid_adds_background.setBackgroundColor(paidContext.getResources().getColor(R.color.background));
+            paid_adds_background.setBackgroundDrawable(paidContext.getResources().getDrawable(R.drawable.border_layout));
         }
 
         paidAddsModel.setSelected(isMoreThanZero(value));
     }
 
-    public boolean isMoreThanZero(int value){
+    private boolean isMoreThanZero(int value){
         return value > 0;
     }
 

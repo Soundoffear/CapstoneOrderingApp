@@ -39,17 +39,6 @@
         app:layout_constraintTop_toBottomOf="@+id/order_placing_frameLayout">
 
         <Button
-            android:id="@+id/order_placing_back_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/back"
-            android:textColor="@color/colorAccent"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <Button
             android:id="@+id/order_placing_next_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"

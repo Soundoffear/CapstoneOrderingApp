@@ -1,7 +1,6 @@
 package com.example.soundoffear.capstoneorderingapp.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -50,9 +49,9 @@ public class SandwichBreadType_ViewHolder extends RecyclerView.ViewHolder implem
 
     public void setSelected(boolean selected) {
         if (selected) {
-            breadType_background.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+            breadType_background.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout_selected));
         } else {
-            breadType_background.setBackgroundColor(mContext.getResources().getColor(R.color.background));
+            breadType_background.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout));
         }
         breadModel.setBread(selected);
     }

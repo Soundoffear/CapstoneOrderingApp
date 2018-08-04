@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
-import com.example.soundoffear.capstoneorderingapp.interfaces.OnDrinksSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.models.DrinksModel;
 
 import butterknife.BindView;
@@ -29,14 +28,12 @@ public class DrinksViewHolder extends RecyclerView.ViewHolder implements View.On
     @BindView(R.id.item_drinks_number_ordered)
     TextView item_drinks_number_ordered;
 
-    Context drinksContext;
-    OnDrinksSelectedListener onDrinksSelectedListener;
+    private Context drinksContext;
     DrinksModel drinksModel;
 
-    DrinksViewHolder(View itemView, OnDrinksSelectedListener drinksSelectedListener, Context drinksContext) {
+    DrinksViewHolder(View itemView, Context drinksContext) {
         super(itemView);
         this.drinksContext = drinksContext;
-        this.onDrinksSelectedListener = drinksSelectedListener;
         ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
     }

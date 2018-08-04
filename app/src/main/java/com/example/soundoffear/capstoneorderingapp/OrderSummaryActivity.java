@@ -1,15 +1,20 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,6 +58,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     public static final String LAST_ORDER_SAVED = "last_order_value";
 
+    @BindView(R.id.order_summary_toolbar)
+    Toolbar order_summary_toolbar;
+
     @BindView(R.id.order_summary_recyclerView)
     RecyclerView order_summary_recyclerView;
     @BindView(R.id.order_summary_drinks_recyclerView)
@@ -78,6 +86,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
     @BindView(R.id.order_summary_send_order)
     Button order_summary_send_button;
 
+    @BindView(R.id.order_summary_cancel_order)
+    Button order_summary_cancel_button;
+
     private String drinksString;
     private String subsString;
     private String cateringString;
@@ -97,6 +108,12 @@ public class OrderSummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_summary);
         ButterKnife.bind(this);
+
+        setSupportActionBar(order_summary_toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Order Summary");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -219,6 +236,28 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         }
 
+        order_summary_cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(new ContextThemeWrapper(OrderSummaryActivity.this, R.style.alert_dialog_background));
+                alertBuilder.setTitle(R.string.cancel_order)
+                        .setMessage("Do you want to cancel your order?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(OrderSummaryActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+            }
+        });
+
         order_summary_send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,6 +372,10 @@ public class OrderSummaryActivity extends AppCompatActivity {
                                 .setValue(Constants.DATABASE_ORDER_RECEIVED);
                     }
 
+                    databaseReference.child(Constants.DATABASE_USERS)
+                            .child(userID)
+                            .child(Constants.DATABASE_LAST_ORDER)
+                            .setValue(orderNumber);
                     PointsSystemClass.addPoints(new DecimalFormat("#").format(Math.round(countTotalPrice)), userID);
                     Intent goToMainPageIntent = new Intent(OrderSummaryActivity.this, MainActivity.class);
                     startActivity(goToMainPageIntent);

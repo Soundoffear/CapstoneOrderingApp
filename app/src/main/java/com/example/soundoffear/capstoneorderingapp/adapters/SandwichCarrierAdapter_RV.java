@@ -2,22 +2,16 @@ package com.example.soundoffear.capstoneorderingapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.interfaces.OnCarrierSelectedListener;
-import com.example.soundoffear.capstoneorderingapp.interfaces.SelectionListener;
 import com.example.soundoffear.capstoneorderingapp.models.CarrierModel;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarrier_ViewHolder> implements OnCarrierSelectedListener {
 

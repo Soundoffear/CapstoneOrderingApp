@@ -41,7 +41,7 @@ public class SandwichPaidAddsAdapter_RV extends RecyclerView.Adapter<SandwichPai
     public SandwichPaidAdds_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(paidContext).inflate(R.layout.item_paidadds, parent, false);
 
-        return new SandwichPaidAdds_ViewHolder(view, this, paidContext);
+        return new SandwichPaidAdds_ViewHolder(view, paidContext);
     }
 
     private int d_numberCount;

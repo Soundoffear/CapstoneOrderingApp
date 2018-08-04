@@ -118,6 +118,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Placing Order...");
 
         Intent intentWithCarriers = getIntent();
         carriersList = intentWithCarriers.getStringArrayListExtra(MainPageFragment.LIST_CARRIERS_STRING);

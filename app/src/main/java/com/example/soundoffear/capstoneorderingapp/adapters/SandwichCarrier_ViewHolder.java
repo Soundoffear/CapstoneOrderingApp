@@ -24,7 +24,7 @@ public class SandwichCarrier_ViewHolder extends RecyclerView.ViewHolder implemen
     @BindView(R.id.carrier_tv)
     TextView carrier_tv;
 
-    public SandwichCarrier_ViewHolder(View itemView, OnCarrierSelectedListener carrierListener, Context context) {
+    SandwichCarrier_ViewHolder(View itemView, OnCarrierSelectedListener carrierListener, Context context) {
         super(itemView);
         this.cContext = context;
         this.carrierSelectedListener = carrierListener;

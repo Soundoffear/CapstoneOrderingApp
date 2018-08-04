@@ -29,7 +29,7 @@ public class CateringViewHolder extends RecyclerView.ViewHolder implements View.
     private OnCateringItemSelectedListener onCateringItemSelectedListener;
     CateringModel cateringModel;
 
-    public CateringViewHolder(View itemView, Context context, OnCateringItemSelectedListener cateringItemSelectedListener) {
+    CateringViewHolder(View itemView, Context context, OnCateringItemSelectedListener cateringItemSelectedListener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.context = context;

@@ -159,9 +159,15 @@ public class FavoritesAdapter_RecyclerView extends RecyclerView.Adapter<Favorite
                 String vegetableChosen = finalSandwichModel.getVegetables();
                 String sauceChosen = finalSandwichModel.getSauces();
                 String paidAddsChosen = finalSandwichModel.getPaidAddOns();
-
-                String[] paidSplit = paidAddsChosen.split("_");
-                priceSandwichFinal = priceSandwichFinal + Double.parseDouble(paidSplit[2]);
+                String[] paidDetails = new String[2];
+                Log.d("FULL_PAID_STRING", paidAddsChosen);
+                String[] paidSplit = paidAddsChosen.split("-");
+                for(int i = 0; i< paidSplit.length; i++) {
+                    Log.d("PAID TEST", paidSplit[i]);
+                    paidDetails = paidSplit[i].split("_");
+                    
+                }
+                priceSandwichFinal = priceSandwichFinal + Double.parseDouble(paidDetails[2]);
 
                 Log.d("FINAL PRICE", String.valueOf(priceSandwichFinal));
                 if (carrierChosen.equals("SUB30") || carrierChosen.equals("SUB15")) {

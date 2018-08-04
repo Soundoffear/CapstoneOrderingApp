@@ -52,9 +52,9 @@ public class SandwichSauces_ViewHolder extends RecyclerView.ViewHolder implement
 
     void setSelected(boolean isSelected) {
         if(isSelected) {
-            sauces_background_cl.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
+            sauces_background_cl.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout_selected));
         } else {
-            sauces_background_cl.setBackgroundColor(mContext.getResources().getColor(R.color.background));
+            sauces_background_cl.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.border_layout));
         }
         saucesModel.setSelected(isSelected);
     }
