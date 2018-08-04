@@ -47,7 +47,7 @@ public class SaucesFragment extends Fragment implements OnSauceSelectedListener 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         sauces_recyclerView.setLayoutManager(linearLayoutManager);
         sauces_recyclerView.setHasFixedSize(true);
-        SandwichSaucesAdapter_RV sandwichSaucesAdapter_rv = new SandwichSaucesAdapter_RV(getContext(), saucesModels, this, true);
+        SandwichSaucesAdapter_RV sandwichSaucesAdapter_rv = new SandwichSaucesAdapter_RV(getContext(), saucesModels, this, true, saucesModelsSelected);
 
         sauces_recyclerView.setAdapter(sandwichSaucesAdapter_rv);
 
@@ -74,5 +74,13 @@ public class SaucesFragment extends Fragment implements OnSauceSelectedListener 
             }
         }
         return stringBuilder.toString();
+    }
+
+    public List<SaucesModel> getSaucesModelsSelected() {
+        return saucesModelsSelected;
+    }
+
+    public void setSaucesModelsSelected(List<SaucesModel> saucesModelsSelected) {
+        this.saucesModelsSelected = saucesModelsSelected;
     }
 }

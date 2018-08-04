@@ -47,7 +47,7 @@ public class VegetableFragment extends Fragment implements OnVegetableSelectedLi
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         order_vegetable_rv.setLayoutManager(gridLayoutManager);
         order_vegetable_rv.setHasFixedSize(true);
-        sandwichVegetableAdapter_rv = new SandwichVegetableAdapter_RV(getContext(), vegetableModelList, this, true);
+        sandwichVegetableAdapter_rv = new SandwichVegetableAdapter_RV(getContext(), vegetableModelList, this, true, selectedForSandwichVegetablesList);
         order_vegetable_rv.setAdapter(sandwichVegetableAdapter_rv);
 
         return vegetableView;
@@ -74,5 +74,13 @@ public class VegetableFragment extends Fragment implements OnVegetableSelectedLi
             }
         }
         return stringBuilder.toString();
+    }
+
+    public List<VegetableModel> getSelectedForSandwichVegetablesList() {
+        return selectedForSandwichVegetablesList;
+    }
+
+    public void setSelectedForSandwichVegetablesList(List<VegetableModel> selectedForSandwichVegetablesList) {
+        this.selectedForSandwichVegetablesList = selectedForSandwichVegetablesList;
     }
 }

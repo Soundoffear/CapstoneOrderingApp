@@ -15,17 +15,9 @@ import com.example.soundoffear.capstoneorderingapp.OrderPlacingActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.adapters.SandwichCarrierAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.interfaces.OnCarrierSelectedListener;
-import com.example.soundoffear.capstoneorderingapp.interfaces.SelectionListener;
 import com.example.soundoffear.capstoneorderingapp.models.CarrierModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +32,7 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_carrier, container,false);
+        View view = inflater.inflate(R.layout.fragment_order_carrier, container, false);
         ButterKnife.bind(this, view);
 
         carrier_recyclerView.hasFixedSize();
@@ -48,29 +40,16 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
 
         carrier_recyclerView.setLayoutManager(gridLayoutManager);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference().child("sandwiches");
-        final List<CarrierModel> typesList = new ArrayList<>();
+        Bundle bundle = getArguments();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        Log.d("CARRIER 0000", "++++++" + String.valueOf(selectedCarrier));
 
-                for(Map.Entry<String, Object> data: ((Map<String, Object>)dataSnapshot.child("types").getValue()).entrySet()) {
-                    CarrierModel carrierModel = new CarrierModel((String) data.getValue());
-                    typesList.add(carrierModel);
-                }
+        assert bundle != null;
+        final List<CarrierModel> typesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CARRIERS);
 
-                SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(), typesList, CarrierChooserFragment.this, false);
-                carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
+                typesList, CarrierChooserFragment.this, false, selectedCarrier);
+        carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
 
         return view;
     }
@@ -82,5 +61,9 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
 
     public String getSelectedCarrier() {
         return selectedCarrier;
+    }
+
+    public void setSelectedCarrier(String selectedCarrier) {
+        this.selectedCarrier = selectedCarrier;
     }
 }

@@ -2,7 +2,9 @@ package com.example.soundoffear.capstoneorderingapp.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +20,20 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
 
     private Context context;
     private List<SandwichModel> sandwichModelList;
-    OnSandwichSelectedListener onSandwichSelectedListener;
+    private OnSandwichSelectedListener onSandwichSelectedListener;
     private boolean isMultiselectable;
     private String carrierType;
+    private String sandwichSelected;
 
-    public SandwichSelectedAdapter_RV(Context context, List<SandwichModel> sandwichModelList, OnSandwichSelectedListener listener, boolean isMultiselectable, String carrierType) {
+    public SandwichSelectedAdapter_RV(Context context, List<SandwichModel> sandwichModelList,
+                                      OnSandwichSelectedListener listener, boolean isMultiselectable,
+                                      String carrierType, @Nullable String sandwichSelecteds) {
         this.context = context;
         this.sandwichModelList = sandwichModelList;
         this.onSandwichSelectedListener = listener;
         this.isMultiselectable = isMultiselectable;
         this.carrierType = carrierType;
+        this.sandwichSelected = sandwichSelecteds;
     }
 
     @NonNull
@@ -40,6 +46,10 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
 
     @Override
     public void onBindViewHolder(@NonNull SandwichSelected_ViewHolder holder, int position) {
+
+        SandwichModel sandwichModel = sandwichModelList.get(position);
+
+        Log.d("SANDWICH CHOSEN", "======" + String.valueOf(sandwichSelected));
 
         holder.sandwich_checkbox.setText(sandwichModelList.get(position).getSandwichName());
         holder.sandwich_description_tv.setText(sandwichModelList.get(position).getSandwichDescription());
@@ -55,11 +65,18 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
             double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
             holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
         }
-
         holder.sandwich_price_currency_tv.setText("PLN");
 
-        holder.sandwichModel = sandwichModelList.get(position);
-        holder.setSelected(holder.sandwichModel.isSelected());
+
+        Log.d("TEST SANDWICH", String.valueOf(sandwichModelList.get(position).getSandwichName().equals(sandwichSelected)));
+        if(sandwichModelList.get(position).getSandwichName().equals(sandwichSelected)) {
+            holder.sandwichModel = sandwichModel;
+            holder.setSelected(true);
+        } else {
+            holder.sandwichModel = sandwichModelList.get(position);
+            holder.setSelected(holder.sandwichModel.isSelected());
+            //sandwichSelected = sandwichModelList.get(position).getSandwichName();
+        }
 
     }
 

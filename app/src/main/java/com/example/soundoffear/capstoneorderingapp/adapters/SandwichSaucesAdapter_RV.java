@@ -15,16 +15,18 @@ import java.util.List;
 
 public class SandwichSaucesAdapter_RV extends RecyclerView.Adapter<SandwichSauces_ViewHolder> implements OnSauceSelectedListener {
 
-    Context mContext;
+    private Context mContext;
     private List<SaucesModel> saucesModels;
-    OnSauceSelectedListener onSauceSelectedListener;
+    private OnSauceSelectedListener onSauceSelectedListener;
     private boolean isMultiSelectable;
+    private List<SaucesModel> selectedSaucesList;
 
-    public SandwichSaucesAdapter_RV(Context mContext, List<SaucesModel> saucesModels, OnSauceSelectedListener onSauceSelectedListener, boolean isMultiSelectable) {
+    public SandwichSaucesAdapter_RV(Context mContext, List<SaucesModel> saucesModels, OnSauceSelectedListener onSauceSelectedListener, boolean isMultiSelectable, List<SaucesModel> selectedSauces) {
         this.mContext = mContext;
         this.saucesModels = saucesModels;
         this.onSauceSelectedListener = onSauceSelectedListener;
         this.isMultiSelectable = isMultiSelectable;
+        this.selectedSaucesList = selectedSauces;
     }
 
     @NonNull
@@ -37,13 +39,25 @@ public class SandwichSaucesAdapter_RV extends RecyclerView.Adapter<SandwichSauce
 
     @Override
     public void onBindViewHolder(@NonNull SandwichSauces_ViewHolder holder, int position) {
-
         SaucesModel saucesModel = saucesModels.get(position);
 
-        holder.sauces_textview_name.setText(saucesModels.get(position).getSauceName());
-
-        holder.saucesModel = saucesModel;
-        holder.setSelected(holder.saucesModel.isSelected());
+        if (selectedSaucesList.size() > 0) {
+            for (SaucesModel sauce : selectedSaucesList) {
+                if (saucesModel.equals(sauce)) {
+                    holder.sauces_textview_name.setText(saucesModels.get(position).getSauceName());
+                    holder.saucesModel = sauce;
+                    holder.setSelected(true);
+                } else {
+                    holder.sauces_textview_name.setText(saucesModels.get(position).getSauceName());
+                    holder.saucesModel = saucesModel;
+                    holder.setSelected(holder.saucesModel.isSelected());
+                }
+            }
+        } else {
+            holder.sauces_textview_name.setText(saucesModels.get(position).getSauceName());
+            holder.saucesModel = saucesModel;
+            holder.setSelected(holder.saucesModel.isSelected());
+        }
     }
 
     @Override
@@ -53,7 +67,7 @@ public class SandwichSaucesAdapter_RV extends RecyclerView.Adapter<SandwichSauce
 
     @Override
     public int getItemViewType(int position) {
-        if(isMultiSelectable) {
+        if (isMultiSelectable) {
             return SandwichSauces_ViewHolder.MULTISELECT;
         } else {
             return SandwichSauces_ViewHolder.SINGLESELECT;
@@ -62,9 +76,9 @@ public class SandwichSaucesAdapter_RV extends RecyclerView.Adapter<SandwichSauce
 
     @Override
     public void onSauceSelected(SaucesModel saucesModel) {
-        if(!isMultiSelectable) {
-            for(SaucesModel sauces : saucesModels) {
-                if(!sauces.equals(saucesModel) && sauces.isSelected()) {
+        if (!isMultiSelectable) {
+            for (SaucesModel sauces : saucesModels) {
+                if (!sauces.equals(saucesModel) && sauces.isSelected()) {
                     sauces.setSelected(false);
                 } else if (sauces.equals(saucesModel) && saucesModel.isSelected()) {
                     sauces.setSelected(true);

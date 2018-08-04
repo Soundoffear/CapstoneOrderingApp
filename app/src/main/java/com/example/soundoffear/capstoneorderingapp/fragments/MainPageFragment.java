@@ -44,7 +44,6 @@ import butterknife.ButterKnife;
 
 public class MainPageFragment extends Fragment {
 
-    public static final String LIST_CARRIERS_STRING = "list_carriers_string";
     public static final String LIST_OF_ORDER_TYPES = "list_of_orders_types";
 
     @BindView(R.id.progressBar_MainPage)

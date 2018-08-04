@@ -30,7 +30,8 @@ public class PaidAddsFragment extends Fragment implements OnPaidAddsSelectedList
     RecyclerView paid_adds_recyclerView;
 
     List<String> paidAddOnsList;
-    private String finalPaidString;
+
+    List<PaidAddsModel> selectedPaidAddsModelList;
 
     @Nullable
     @Override
@@ -39,6 +40,7 @@ public class PaidAddsFragment extends Fragment implements OnPaidAddsSelectedList
         ButterKnife.bind(this, view);
 
         paidAddOnsList = new ArrayList<>();
+        selectedPaidAddsModelList = new ArrayList<>();
 
         Bundle bundle = getArguments();
         assert bundle != null;
@@ -53,8 +55,10 @@ public class PaidAddsFragment extends Fragment implements OnPaidAddsSelectedList
                 true,
                 this,
                 carrierChosen,
-                this);
+                this,
+                selectedPaidAddsModelList);
         paid_adds_recyclerView.setAdapter(sandwichPaidAddsAdapter_rv);
+
         return view;
     }
 
@@ -77,20 +81,28 @@ public class PaidAddsFragment extends Fragment implements OnPaidAddsSelectedList
         if (numberOfSelected > 0) {
             paidAddOnsList.add(finalPaidString);
         }
-        for(int i = 0; i < paidAddOnsList.size(); i++) {
+        for (int i = 0; i < paidAddOnsList.size(); i++) {
             Log.d("TEST TEST", paidAddOnsList.get(i));
         }
     }
 
     public String getPaidAddsData() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < paidAddOnsList.size(); i++) {
-            if(i < paidAddOnsList.size() - 1) {
+        for (int i = 0; i < paidAddOnsList.size(); i++) {
+            if (i < paidAddOnsList.size() - 1) {
                 stringBuilder.append(paidAddOnsList.get(i)).append("-");
             } else {
                 stringBuilder.append(paidAddOnsList.get(i));
             }
         }
         return stringBuilder.toString();
+    }
+
+    public List<PaidAddsModel> getPaidAddsModelList() {
+        return selectedPaidAddsModelList;
+    }
+
+    public void setPaidAddsModelList(List<PaidAddsModel> paidAddsModelList) {
+        this.selectedPaidAddsModelList = paidAddsModelList;
     }
 }

@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +42,25 @@ public class BreadTypeFragment extends Fragment implements SandwichBreadType_Vie
         assert bundle != null;
         breadTypesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_BREAD_TYPES);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        SandwichBreadTypeAdapter_RV sandwichBreadTypeAdapter_rv = new SandwichBreadTypeAdapter_RV(getContext(),
-                breadTypesList,
-                this,
-                false);
         breadType_recyclerView.hasFixedSize();
         breadType_recyclerView.setLayoutManager(gridLayoutManager);
-        breadType_recyclerView.setAdapter(sandwichBreadTypeAdapter_rv);
+        if(breadModelSelected!= null) {
+            Log.d("BREAD BREAD", "HERE IS BREAD _____-------+++++++");
+            SandwichBreadTypeAdapter_RV sandwichBreadTypeAdapter_rv = new SandwichBreadTypeAdapter_RV(getContext(),
+                    breadTypesList,
+                    this,
+                    false,
+                    breadModelSelected);
+            breadType_recyclerView.setAdapter(sandwichBreadTypeAdapter_rv);
+        } else {
+            Log.d("BREAD BREAD", "HERE IS NO BREAD _____-------+++++++");
+            SandwichBreadTypeAdapter_RV sandwichBreadTypeAdapter_rv = new SandwichBreadTypeAdapter_RV(getContext(),
+                    breadTypesList,
+                    this,
+                    false,
+                    null);
+            breadType_recyclerView.setAdapter(sandwichBreadTypeAdapter_rv);
+        }
 
         return view;
     }
@@ -57,7 +70,11 @@ public class BreadTypeFragment extends Fragment implements SandwichBreadType_Vie
         breadModelSelected = breadModel;
     }
 
-    public String getBreadType() {
-        return breadModelSelected.getBreadName();
+    public BreadModel getBreadModelSelected() {
+        return breadModelSelected;
+    }
+
+    public void setBreadModelSelected(BreadModel breadModelSelected) {
+        this.breadModelSelected = breadModelSelected;
     }
 }

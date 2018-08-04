@@ -41,7 +41,6 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
     Toolbar order_drinks_toolbar;
 
     List<DrinksModel> drinks_list;
-    String finalStringPerDrink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
