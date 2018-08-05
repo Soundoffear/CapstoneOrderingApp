@@ -133,7 +133,6 @@ public class OrderPlacingActivity extends AppCompatActivity {
         finalSandwichModelList = finalSandwichDataBase.getAllFinalSandwichData();
 
         if (finalSandwichModelList.size() > 0) {
-            Log.d("There is order in DB", "Number of Orders:" + finalSandwichModelList.size());
             for (int i = 0; i < finalSandwichModelList.size(); i++) {
                 FinalSandwichModel finalSandwichModel = finalSandwichModelList.get(i);
                 carrierChosen = finalSandwichModel.getCarrier();
@@ -150,7 +149,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Placing Order...");
+        actionBar.setTitle(R.string.placing_order);
 
         Intent intentWithCarriers = getIntent();
         List<OrderTypeModel> orderTypesList = intentWithCarriers.getParcelableArrayListExtra(MainPageFragment.LIST_OF_ORDER_TYPES);
@@ -166,11 +165,6 @@ public class OrderPlacingActivity extends AppCompatActivity {
         } else {
             initializeFragment = new OrderTypesFragment();
         }
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(MainPageFragment.LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
-        initializeFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.order_placing_frameLayout, initializeFragment);
-        fragmentTransaction.commit();
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference().child("sandwiches");
@@ -239,6 +233,12 @@ public class OrderPlacingActivity extends AppCompatActivity {
             }
         });
 
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(MainPageFragment.LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
+        initializeFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.order_placing_frameLayout, initializeFragment);
+        fragmentTransaction.commit();
+
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,7 +277,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                                 break;
                         }
                     } else {
-                        Snackbar.make(order_placing_frameLayout, "Please choose order", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(order_placing_frameLayout, R.string.please_choose_order, Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 if (loadedFragment instanceof CateringFragments) {
@@ -317,7 +317,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         ft.addToBackStack(null);
                         ft.commit();
                     } else {
-                        Snackbar.make(order_placing_frameLayout, "Please choose type", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(order_placing_frameLayout, R.string.please_choose_type, Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 if (loadedFragment instanceof SandwichChoicesFragment) {
@@ -346,7 +346,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                             ft.commit();
                         }
                     } else {
-                        Snackbar.make(order_placing_frameLayout, "Please choose Sub", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(order_placing_frameLayout, R.string.please_choose_sub, Snackbar.LENGTH_SHORT).show();
                     }
                 }
                 if (loadedFragment instanceof BreadTypeFragment) {
@@ -363,7 +363,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         ft.addToBackStack(null);
                         ft.commit();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please choose bread", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.please_choose_bread, Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (loadedFragment instanceof VegetableFragment) {
@@ -383,14 +383,14 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     } else {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(new ContextThemeWrapper(OrderPlacingActivity.this, R.style.alert_dialog_background));
-                        builder.setTitle("No Vegetables")
-                                .setMessage("There is no vegetables selected, would you like to select some?")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.no_veges)
+                                .setMessage(getString(R.string.no_veges_message))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
                                     }
-                                }).setNegativeButton("No veges, please", new DialogInterface.OnClickListener() {
+                                }).setNegativeButton(getString(R.string.no_veges_please), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 SaucesFragment saucesFragment = new SaucesFragment();
@@ -422,14 +422,14 @@ public class OrderPlacingActivity extends AppCompatActivity {
                         ft.commit();
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(OrderPlacingActivity.this, R.style.alert_dialog_background));
-                        builder.setTitle("No Sauces")
-                                .setMessage("There is no sauces selected, would you like to select some?")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.no_sauces)
+                                .setMessage(getString(R.string.no_sauces_message))
+                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
                                     }
-                                }).setNegativeButton("No sauces, please", new DialogInterface.OnClickListener() {
+                                }).setNegativeButton(getString(R.string.no_sauces_please), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 PaidAddsFragment paidAddsFragment = new PaidAddsFragment();

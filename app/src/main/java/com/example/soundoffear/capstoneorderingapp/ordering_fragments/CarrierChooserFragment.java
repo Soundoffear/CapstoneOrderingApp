@@ -14,10 +14,18 @@ import android.view.ViewGroup;
 import com.example.soundoffear.capstoneorderingapp.OrderPlacingActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.adapters.SandwichCarrierAdapter_RV;
+import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
 import com.example.soundoffear.capstoneorderingapp.interfaces.OnCarrierSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.models.CarrierModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +36,7 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
     RecyclerView carrier_recyclerView;
 
     private String selectedCarrier = null;
+    private List<CarrierModel> typesList;
 
     @Nullable
     @Override
@@ -39,17 +48,43 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
 
         carrier_recyclerView.setLayoutManager(gridLayoutManager);
-
         Bundle bundle = getArguments();
-
-        Log.d("CARRIER 0000", "++++++" + String.valueOf(selectedCarrier));
-
         assert bundle != null;
-        final List<CarrierModel> typesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CARRIERS);
 
-        SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
-                typesList, CarrierChooserFragment.this, false, selectedCarrier);
-        carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
+        if(FavoritesFragment.isAddingFav) {
+            Log.d("TEST", "TESTING FAVS");
+            typesList = new ArrayList<>();
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference databaseReference = firebaseDatabase.getReference().child("sandwiches");
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Map<String, Object> carriersData = (Map<String, Object>) dataSnapshot.child("types").getValue();
+                    assert carriersData != null;
+                    for (Map.Entry<String, Object> carrier : carriersData.entrySet()) {
+                        String carrierName = String.valueOf(carrier.getValue());
+                        CarrierModel carrierModel = new CarrierModel(carrierName);
+                        typesList.add(carrierModel);
+                    }
+                    SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
+                            typesList, CarrierChooserFragment.this, false, selectedCarrier);
+                    carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        } else {
+            typesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CARRIERS);
+            Log.d("CARRIER LIST", String.valueOf(typesList.size()));
+            SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
+                    typesList, CarrierChooserFragment.this, false, selectedCarrier);
+            carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);
+        }
 
         return view;
     }

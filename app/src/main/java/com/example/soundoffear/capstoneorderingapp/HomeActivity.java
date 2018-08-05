@@ -11,10 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.soundoffear.capstoneorderingapp.utilities.InternetCheck;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthActionCodeException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
@@ -37,12 +40,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.home_screen_exit_button)
     Button btn_exit;
 
+    InternetCheck internetCheck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
+
+        internetCheck = new InternetCheck(getApplicationContext());
+
+        internetCheck.execute();
 
         btn_login.setOnClickListener(this);
         btn_sign_up.setOnClickListener(this);
@@ -69,14 +78,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "LogIn with email: Successful");
-                            Toast.makeText(getApplicationContext(), "Logged In", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.logged_in, Toast.LENGTH_SHORT).show();
 
                             Intent startMainPageActivity = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(startMainPageActivity);
-
                         } else {
                             Log.w(TAG, "LogIn with email: Failed", task.getException());
-                            Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_LONG).show();
                         }
 
                         if (!task.isSuccessful()) {
@@ -96,11 +104,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.account_created, Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             sendEmailValidation(user);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Can not create account", Toast.LENGTH_SHORT).show();
+                        }
+                        if(!task.isSuccessful()) {
+                            try{
+                                throw task.getException();
+                            } catch (FirebaseAuthActionCodeException fe) {
+                                et_login_email_input.setError(getString(R.string.invalid_email));
+                                et_login_email_input.requestFocus();
+                            } catch (FirebaseAuthInvalidUserException fe) {
+                                et_login_email_input.setError(getString(R.string.user_exists));
+                                et_login_email_input.requestFocus();
+                            } catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
                         }
                     }
                 });
@@ -135,9 +154,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             String email = et_login_email_input.getText().toString();
 
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Send e-mail to: " + email, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.mail_send) + email, Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getApplicationContext(), "Failed to send e-mail", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.mail_not_send, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -155,7 +174,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             createAccount(et_login_email_input.getText().toString(), et_login_password_input.getText().toString());
         }
         if (id == R.id.home_screen_exit_button) {
-            Toast.makeText(this, "Exiting Application", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.exiting_app, Toast.LENGTH_LONG).show();
         }
 
     }

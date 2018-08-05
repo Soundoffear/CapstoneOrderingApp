@@ -53,7 +53,6 @@ public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarr
             holder.carrier_tv.setText(carrierModel.getCarrierName());
             holder.carrierModel = carrierModel;
             holder.setSelected(holder.carrierModel.isSelectedCarrier());
-            //selectedNameCarrier = carrierModel.getCarrierName();
         }
     }
 
@@ -61,7 +60,6 @@ public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarr
     public int getItemCount() {
         return carriersList.size();
     }
-
 
     @Override
     public int getItemViewType(int position) {

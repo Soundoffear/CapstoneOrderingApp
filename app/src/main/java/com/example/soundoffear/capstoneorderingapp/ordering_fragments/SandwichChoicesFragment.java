@@ -42,9 +42,6 @@ public class SandwichChoicesFragment extends Fragment implements OnSandwichSelec
         List<SandwichModel> sandwichModelList = dataBundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CHOICES);
         String carrierChosen = dataBundle.getString(OrderPlacingActivity.SANDWICH_CARRIER_CHOSEN);
 
-        if(sandwichModelSelected != null) {
-            Log.d("TEST S0001", "+++++" + String.valueOf(sandwichModelSelected.getSandwichName()));
-        }
         order_sandwich_recyclerView.hasFixedSize();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         order_sandwich_recyclerView.setLayoutManager(linearLayoutManager);
