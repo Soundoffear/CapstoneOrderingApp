@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (dataSnapshot.getValue() != null) {
                                     Map<String, Object> userData = (Map<String, Object>) dataSnapshot.getValue();
                                     UserDataModel userDataModel;
-                                    if (TextUtils.isEmpty(userData.get("userAddressStreet2").toString())) {
+                                    if (String.valueOf(userData.get("userAddressStreet2")).equals("null")) {
                                         userDataModel = new UserDataModel(userData.get("userName").toString(),
                                                 userData.get("userSurname").toString(),
                                                 userData.get("userPhone").toString(),

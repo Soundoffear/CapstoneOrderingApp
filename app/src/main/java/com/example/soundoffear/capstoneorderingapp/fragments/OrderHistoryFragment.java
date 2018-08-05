@@ -3,6 +3,7 @@ package com.example.soundoffear.capstoneorderingapp.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,42 +68,44 @@ public class OrderHistoryFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, Object> ordersNumbers = (Map<String, Object>) dataSnapshot.getValue();
 
-                Log.d("--- HIStORY", "----" + ordersNumbers.size());
-
-                for(Map.Entry<String, Object> order: ordersNumbers.entrySet()) {
-                    historyModel = new HistoryModel(HistoryModel.LABEL_TYPE, order.getKey());
-                    historyModelList.add(historyModel);
-                    Log.d("TEST HISTORY", String.valueOf(order.getKey()));
-                    if(!order.getKey().equals(Constants.DATABASE_ORDER_STATUS)) {
-                        Log.d("TEST PROBLEM", String.valueOf(order.getValue() + " KEY:" + order.getKey()));
-                        Map<String, Object> orderItems = (Map<String, Object>) order.getValue();
-                        for (Map.Entry<String, Object> orderItem : orderItems.entrySet()) {
-                            String item = String.valueOf(orderItem.getKey());
-                            if (item.contains("Drink")) {
-                                Map<String, String> drinkItem = (Map<String, String>) orderItem.getValue();
-                                historyModel = new HistoryModel(HistoryModel.DRINK_TYPE, drinkItem.get("name"), drinkItem.get("price"), drinkItem.get("value"));
-                                historyModelList.add(historyModel);
-                            }
-                            if (item.contains("Sub")) {
-                                Map<String, String> subItems = (Map<String, String>) orderItem.getValue();
-                                historyModel = new HistoryModel(HistoryModel.SANDWICH_TYPE, subItems.get("sandwich"), subItems.get("finalPrice"), subItems.get("carrier"), subItems.get("bread"),
-                                        subItems.get("paidAddOns"), subItems.get("sauces"), subItems.get("vegetables"));
-                                historyModelList.add(historyModel);
-                            }
-                            if (item.contains("Sides")) {
-                                Map<String, String> sideItems = (Map<String, String>) orderItem.getValue();
-                                historyModel = new HistoryModel(HistoryModel.SIDE_TYPE, sideItems.get("sideName"), sideItems.get("sidePrice"), sideItems.get("sideNumber"));
-                                historyModelList.add(historyModel);
-                            }
-                            if (item.contains("Catering")) {
-                                Map<String, String> cateringItems = (Map<String, String>) orderItem.getValue();
-                                historyModel = new HistoryModel(HistoryModel.CATERING_TYPE, cateringItems.get("cateringName"), cateringItems.get("cateringPrice"));
-                                historyModelList.add(historyModel);
+                if (ordersNumbers != null) {
+                    for (Map.Entry<String, Object> order : ordersNumbers.entrySet()) {
+                        historyModel = new HistoryModel(HistoryModel.LABEL_TYPE, order.getKey());
+                        historyModelList.add(historyModel);
+                        Log.d("TEST HISTORY", String.valueOf(order.getKey()));
+                        if (!order.getKey().equals(Constants.DATABASE_ORDER_STATUS)) {
+                            Log.d("TEST PROBLEM", String.valueOf(order.getValue() + " KEY:" + order.getKey()));
+                            Map<String, Object> orderItems = (Map<String, Object>) order.getValue();
+                            for (Map.Entry<String, Object> orderItem : orderItems.entrySet()) {
+                                String item = String.valueOf(orderItem.getKey());
+                                if (item.contains("Drink")) {
+                                    Map<String, String> drinkItem = (Map<String, String>) orderItem.getValue();
+                                    historyModel = new HistoryModel(HistoryModel.DRINK_TYPE, drinkItem.get("name"), drinkItem.get("price"), drinkItem.get("value"));
+                                    historyModelList.add(historyModel);
+                                }
+                                if (item.contains("Sub")) {
+                                    Map<String, String> subItems = (Map<String, String>) orderItem.getValue();
+                                    historyModel = new HistoryModel(HistoryModel.SANDWICH_TYPE, subItems.get("sandwich"), subItems.get("finalPrice"), subItems.get("carrier"), subItems.get("bread"),
+                                            subItems.get("paidAddOns"), subItems.get("sauces"), subItems.get("vegetables"));
+                                    historyModelList.add(historyModel);
+                                }
+                                if (item.contains("Sides")) {
+                                    Map<String, String> sideItems = (Map<String, String>) orderItem.getValue();
+                                    historyModel = new HistoryModel(HistoryModel.SIDE_TYPE, sideItems.get("sideName"), sideItems.get("sidePrice"), sideItems.get("sideNumber"));
+                                    historyModelList.add(historyModel);
+                                }
+                                if (item.contains("Catering")) {
+                                    Map<String, String> cateringItems = (Map<String, String>) orderItem.getValue();
+                                    historyModel = new HistoryModel(HistoryModel.CATERING_TYPE, cateringItems.get("cateringName"), cateringItems.get("cateringPrice"));
+                                    historyModelList.add(historyModel);
+                                }
                             }
                         }
                     }
+                } else {
+                    Snackbar.make(order_history_recyclerView, "There is no order history", Snackbar.LENGTH_SHORT).show();
                 }
-                for(int i = 0; i < historyModelList.size(); i++) {
+                for (int i = 0; i < historyModelList.size(); i++) {
                     Log.d("H M check", historyModelList.get(i).getName() + " | " + historyModelList.get(i).getType());
                 }
 

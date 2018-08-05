@@ -70,7 +70,7 @@ public class MainPageFragment extends Fragment {
         final CateringOrderDatabase cateringOrderDatabase = new CateringOrderDatabase(getContext());
         final SidesOrderDatabase sidesOrderDatabase = new SidesOrderDatabase(getContext());
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         DatabaseReference databaseReference1 = firebaseDatabase.getReference();
 
@@ -100,34 +100,33 @@ public class MainPageFragment extends Fragment {
             }
         });
 
-        DatabaseReference pointsDBRefrence = firebaseDatabase.getReference().child(Constants.DATABASE_USERS).child(userID);
+        final DatabaseReference pointsDBRefrence = firebaseDatabase.getReference().child(Constants.DATABASE_USERS).child(userID);
 
         pointsDBRefrence.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, Object> userData = (Map<String, Object>) dataSnapshot.getValue();
-                assert userData != null;
-                Log.d("TEST DATA", String.valueOf(userData.size()));
+                if(!dataSnapshot.exists()) {
+                    firebaseDatabase.getReference().child(Constants.DATABASE_USERS).child(userID).child(Constants.DATABASE_USER_POINTS).setValue("0");
+                } else {
+                    for (Map.Entry<String, Object> pointsData : ((Map<String, Object>) dataSnapshot.getValue()).entrySet()) {
+                        if (pointsData.getKey().equals(Constants.DATABASE_USER_POINTS)) {
+                            Log.d("Check Points exists", "YES");
+                            String pointsDisplay = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue()))) + maximumPointsString;
+                            pointsTextView.setText(pointsDisplay);
+                            String points = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue())));
+                            double pointsDataBase = Double.parseDouble(points);
+                            double progressDouble = (pointsDataBase / maximumPoints) * 100;
+                            int progressValue = Integer.parseInt(new DecimalFormat("#").format(progressDouble));
 
-                for(Map.Entry<String, Object> pointsData: ((Map<String, Object>) dataSnapshot.getValue()).entrySet()) {
-                    if(pointsData.getKey().equals(Constants.DATABASE_USER_POINTS)) {
-                        Log.d("Check Points exists", "YES");
-                        String pointsDisplay = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue()))) + maximumPointsString;
-                        pointsTextView.setText(pointsDisplay);
-                        String points = new DecimalFormat("#").format(Double.parseDouble(String.valueOf(pointsData.getValue())));
-                        double pointsDataBase = Double.parseDouble(points);
-                        double progressDouble = (pointsDataBase / maximumPoints) * 100;
-                        int progressValue = Integer.parseInt(new DecimalFormat("#").format(progressDouble));
+                            Log.d("Progress Value", String.valueOf(progressValue) + " " + progressDouble + " " + pointsDataBase);
 
-                        Log.d("Progress Value", String.valueOf(progressValue) + " " + progressDouble + " " + pointsDataBase);
+                            pointsProgressBar.setProgress(progressValue);
+                        } else {
+                            Log.d("Points not exists", pointsData.getKey());
 
-                        pointsProgressBar.setProgress(progressValue);
-                    } else {
-                        Log.d("Points not exists", pointsData.getKey());
-
+                        }
                     }
                 }
-
             }
 
             @Override
