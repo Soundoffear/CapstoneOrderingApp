@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 
@@ -26,7 +25,6 @@ import com.example.soundoffear.capstoneorderingapp.fragments.SettingsFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.UserDataOutputFragment;
 import com.example.soundoffear.capstoneorderingapp.models.UserDataModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
-import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String USER_DATA_BUNDLE = "user_data_bundle";
 
     public static final String DATA_FAV = "start_fav_fragment";
+
+    public static final String SAVING_FRAGMENT = "saving_fragment_state";
 
     private DrawerLayout drawerLayout;
 
@@ -60,26 +60,30 @@ public class MainActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
-        Intent intent = getIntent();
-
         drawerLayout = findViewById(R.id.nav_drawer_layout);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (intent != null) {
-            intentString = intent.getStringExtra(DATA_FAV);
-            if (!TextUtils.isEmpty(intentString)) {
-                if (intentString.equals(Constants.DATABASE_FAVORITES)) {
-                    fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
+        if(savedInstanceState != null) {
+            Fragment mFragment = fragmentManager.getFragment(savedInstanceState, SAVING_FRAGMENT);
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_frameLayout, mFragment).commit();
+        } else {
+            Intent intent = getIntent();
+
+            if (intent != null) {
+                intentString = intent.getStringExtra(DATA_FAV);
+                if (!TextUtils.isEmpty(intentString)) {
+                    if (intentString.equals(Constants.DATABASE_FAVORITES)) {
+                        fragmentTransaction.add(R.id.main_frameLayout, new FavoritesFragment());
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                } else {
+                    fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
-            } else {
-                fragmentTransaction.add(R.id.main_frameLayout, new MainPageFragment());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
             }
         }
 
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.delivery_address:
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        assert firebaseUser != null;
                         final String userID = firebaseUser.getUid();
 
                         actionBar.setTitle("User Data");
@@ -223,5 +228,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Fragment lastOpenFragment = getSupportFragmentManager().findFragmentById(R.id.main_frameLayout);
+
+        getSupportFragmentManager().putFragment(outState, SAVING_FRAGMENT, lastOpenFragment);
     }
 }

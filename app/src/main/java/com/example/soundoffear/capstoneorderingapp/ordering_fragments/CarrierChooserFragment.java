@@ -80,7 +80,6 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
 
         } else {
             typesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CARRIERS);
-            Log.d("CARRIER LIST", String.valueOf(typesList.size()));
             SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
                     typesList, CarrierChooserFragment.this, false, selectedCarrier);
             carrier_recyclerView.setAdapter(sandwichCarrierAdapter_rv);

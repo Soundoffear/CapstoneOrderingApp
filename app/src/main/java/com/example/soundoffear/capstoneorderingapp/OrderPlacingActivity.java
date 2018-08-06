@@ -67,6 +67,8 @@ public class OrderPlacingActivity extends AppCompatActivity {
     public static final String SANDWICH_PAID_ADDS_BUNDLE = "sandwich_paid_adds_data";
     public static final String SANDWICH_CARRIER_CHOSEN = "sandwich_carrier_chosen";
 
+    public static final String LAST_FRAGMENT_STATE = "last_fragment_state";
+
     public static boolean isOrderingAdditionalSandwich = false;
     public static boolean isOrderingAdditionalSides = false;
     public static boolean isOrderingAdditionalCatering = false;
@@ -156,14 +158,38 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (isOrderingAdditionalSandwich || FavoritesFragment.isAddingFav) {
-            initializeFragment = new CarrierChooserFragment();
-        } else if (isOrderingAdditionalSides) {
-            initializeFragment = new SidesFragment();
-        } else if (isOrderingAdditionalCatering) {
-            initializeFragment = new CateringFragments();
+
+        if (savedInstanceState != null) {
+
+            carrierChosen = savedInstanceState.getString(SANDWICH_CARRIERS);
+            sandwichChosen = savedInstanceState.getString(SANDWICH_CHOICES);
+            sandwichPriceChosen = savedInstanceState.getString(SANDWICH_PRICE_CHOSEN);
+            vegetableChosen = savedInstanceState.getString(SANDWICH_VEGETABLES);
+            breadChosen = savedInstanceState.getString(SANDWICH_BREAD_TYPES);
+            sauceChosen = savedInstanceState.getString(SANDWICH_SAUCE_BUNDLE);
+            paidAddsChosen = savedInstanceState.getString(SANDWICH_PAID_ADDS_BUNDLE);
+
+            Fragment restoredFragment = fragmentManager.getFragment(savedInstanceState, LAST_FRAGMENT_STATE);
+            fragmentManager.beginTransaction().replace(R.id.order_placing_frameLayout, restoredFragment).addToBackStack(null).commit();
+
         } else {
-            initializeFragment = new OrderTypesFragment();
+
+            if (isOrderingAdditionalSandwich || FavoritesFragment.isAddingFav) {
+                initializeFragment = new CarrierChooserFragment();
+            } else if (isOrderingAdditionalSides) {
+                initializeFragment = new SidesFragment();
+            } else if (isOrderingAdditionalCatering) {
+                initializeFragment = new CateringFragments();
+            } else {
+                initializeFragment = new OrderTypesFragment();
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(MainPageFragment.LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
+            initializeFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.order_placing_frameLayout, initializeFragment);
+            fragmentTransaction.commit();
+
         }
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -232,12 +258,6 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
             }
         });
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(MainPageFragment.LIST_OF_ORDER_TYPES, (ArrayList<OrderTypeModel>) orderTypesList);
-        initializeFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.order_placing_frameLayout, initializeFragment);
-        fragmentTransaction.commit();
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -407,7 +427,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                 }
                 if (loadedFragment instanceof SaucesFragment) {
                     SaucesFragment saucesFragment = (SaucesFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
-                    if(saucesFragment.getSaucesModelsSelected().size() > 0) {
+                    if (saucesFragment.getSaucesModelsSelected().size() > 0) {
                         selectedSaucesList = saucesFragment.getSaucesModelsSelected();
                     }
                     if (!TextUtils.isEmpty(saucesFragment.getAllSaucesChosen())) {
@@ -450,7 +470,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     PaidAddsFragment paidAddsFragment = (PaidAddsFragment) fm.findFragmentById(R.id.order_placing_frameLayout);
                     paidAddsChosen = paidAddsFragment.getPaidAddsData();
                     //Calculate final total price for sandwich
-                    if(paidAddsFragment.getPaidAddsModelList().size() > 0) {
+                    if (paidAddsFragment.getPaidAddsModelList().size() > 0) {
                         selectedPaidAddsList = paidAddsFragment.getPaidAddsModelList();
                     }
                     double d_sandwichPrice = Double.parseDouble(sandwichPriceChosen);
@@ -528,13 +548,13 @@ public class OrderPlacingActivity extends AppCompatActivity {
                     }
                 } else if (fragment instanceof SaucesFragment) {
                     SaucesFragment saucesFragment = (SaucesFragment) fragment;
-                    if(selectedSaucesList.size() > 0) {
+                    if (selectedSaucesList.size() > 0) {
                         saucesFragment.setSaucesModelsSelected(selectedSaucesList);
                         Log.d("SAUCES OPS", String.valueOf(selectedSaucesList.size()));
                     }
                 } else if (fragment instanceof PaidAddsFragment) {
                     PaidAddsFragment paidAddsFragment = (PaidAddsFragment) fragment;
-                    if(selectedPaidAddsList.size() > 0) {
+                    if (selectedPaidAddsList.size() > 0) {
                         paidAddsFragment.setPaidAddsModelList(paidAddsModelList);
                         Log.d("PAID ADDS OPS", String.valueOf(selectedPaidAddsList.size()));
                     }
@@ -544,4 +564,36 @@ public class OrderPlacingActivity extends AppCompatActivity {
 
     }
 
+    public static final String SANDWICH_PRICE_CHOSEN = "sandwich_price_chosen";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Fragment lastFragment = getSupportFragmentManager().findFragmentById(R.id.order_placing_frameLayout);
+
+        if (carrierChosen != null) {
+            outState.putString(SANDWICH_CARRIERS, carrierChosen);
+        }
+        if (sandwichChosen != null) {
+            outState.putString(SANDWICH_CHOICES, sandwichChosen);
+        }
+        if (sandwichPriceChosen != null) {
+            outState.putString(SANDWICH_PRICE_CHOSEN, sandwichPriceChosen);
+        }
+        if (vegetableChosen != null) {
+            outState.putString(SANDWICH_VEGETABLES, vegetableChosen);
+        }
+        if (breadChosen != null) {
+            outState.putString(SANDWICH_BREAD_TYPES, breadChosen);
+        }
+        if (sauceChosen != null) {
+            outState.putString(SANDWICH_SAUCE_BUNDLE, sauceChosen);
+        }
+        if (paidAddsChosen != null) {
+            outState.putString(SANDWICH_PAID_ADDS_BUNDLE, paidAddsChosen);
+        }
+
+        getSupportFragmentManager().putFragment(outState, LAST_FRAGMENT_STATE, lastFragment);
+    }
 }

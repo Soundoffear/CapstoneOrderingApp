@@ -49,33 +49,43 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
 
         SandwichModel sandwichModel = sandwichModelList.get(position);
 
-        Log.d("SANDWICH CHOSEN", "======" + String.valueOf(sandwichSelected));
-
-        holder.sandwich_checkbox.setText(sandwichModelList.get(position).getSandwichName());
-        holder.sandwich_description_tv.setText(sandwichModelList.get(position).getSandwichDescription());
-        if(carrierType.equals("SALAD")) {
-            double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
-            sandwichPrice = sandwichPrice + 2;
-            holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
-        } else if (carrierType.equals("SUB30")) {
-            double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
-            sandwichPrice = sandwichPrice + 8;
-            holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
-        } else {
-            double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
-            holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
-        }
-        holder.sandwich_price_currency_tv.setText("PLN");
-
-
-        Log.d("TEST SANDWICH", String.valueOf(sandwichModelList.get(position).getSandwichName().equals(sandwichSelected)));
         if(sandwichModelList.get(position).getSandwichName().equals(sandwichSelected)) {
+            holder.sandwich_checkbox.setText(sandwichModelList.get(position).getSandwichName());
+            holder.sandwich_description_tv.setText(sandwichModelList.get(position).getSandwichDescription());
+            if(carrierType.equals("SALAD")) {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                sandwichPrice = sandwichPrice + 2;
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            } else if (carrierType.equals("SUB30")) {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                sandwichPrice = sandwichPrice + 8;
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            } else {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            }
+            holder.sandwich_price_currency_tv.setText("PLN");
             holder.sandwichModel = sandwichModel;
             holder.setSelected(true);
+            sandwichSelected = null;
         } else {
+            holder.sandwich_checkbox.setText(sandwichModelList.get(position).getSandwichName());
+            holder.sandwich_description_tv.setText(sandwichModelList.get(position).getSandwichDescription());
+            if(carrierType.equals("SALAD")) {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                sandwichPrice = sandwichPrice + 2;
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            } else if (carrierType.equals("SUB30")) {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                sandwichPrice = sandwichPrice + 8;
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            } else {
+                double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
+                holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
+            }
+            holder.sandwich_price_currency_tv.setText("PLN");
             holder.sandwichModel = sandwichModelList.get(position);
             holder.setSelected(holder.sandwichModel.isSelected());
-            //sandwichSelected = sandwichModelList.get(position).getSandwichName();
         }
 
     }
