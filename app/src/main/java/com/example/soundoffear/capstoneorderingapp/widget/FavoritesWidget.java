@@ -3,11 +3,14 @@ package com.example.soundoffear.capstoneorderingapp.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.example.soundoffear.capstoneorderingapp.MainActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
@@ -29,70 +32,36 @@ import java.util.Map;
  */
 public class FavoritesWidget extends AppWidgetProvider {
 
-    RemoteViews remoteViews;
+    public static final int WIDGET_REQUEST_CODE = 111;
 
-    public static final String DATA_TRANSFER = "data_transfer_to_list_view";
-    RemoteViews views;
+    public static final String ACTION_TEST_TOAST = "com.example.soundoffear.capstoneorderingapp.TOAST_ACTION";
 
-    private RemoteViews updateAppWidgetWithRemoteViews(final Context context, final int appWidgetId, List<String> itemsList) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.favorites_widget);
 
-        views = new RemoteViews(context.getPackageName(), R.layout.favorites_widget);
+        Intent intent = new Intent(context, MainActivity.class);
 
-        final Intent intent = new Intent(context, FavoritesWidgetServices.class);
+        intent.setAction(ACTION_TEST_TOAST);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.putStringArrayListExtra(DATA_TRANSFER, (ArrayList<String>) itemsList);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(appWidgetId, R.id.appwidget_listView, intent);
-        views.setEmptyView(R.id.appwidget_listView, R.id.item_fav_tv);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return views;
+        views.setPendingIntentTemplate(R.id.appwidget_listView, pendingIntent);
 
+        Intent listIntent = new Intent(context, FavoritesWidgetServices.class);
+        listIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        listIntent.setData(Uri.parse(listIntent.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(R.id.appwidget_listView, listIntent);
+
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
-                .child(Constants.DATABASE_USERS)
-                .child(userID)
-                .child(Constants.DATABASE_FAVORITES);
-        final List<String> finalItemsList = new ArrayList<>();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, Object> favourites = (Map<String, Object>) dataSnapshot.getValue();
-                for(Map.Entry<String, Object> fav: favourites.entrySet()) {
-                    Map<String, Object> favModel = (Map<String, Object>) fav.getValue();
-                    FinalSandwichModel finalSandwichModel = new FinalSandwichModel(fav.getKey(),
-                            favModel.get("carrier").toString(),
-                            favModel.get("sandwich").toString(),
-                            favModel.get("bread").toString(),
-                            favModel.get("vegetables").toString(),
-                            favModel.get("sauces").toString(),
-                            favModel.get("paidAddOns").toString(),
-                            favModel.get("finalPrice").toString());
-
-                    finalItemsList.add(finalSandwichModel.getSandwich());
-                }
-                for (int appWidgetID : appWidgetIds) {
-
-                    remoteViews = updateAppWidgetWithRemoteViews(context, appWidgetID, finalItemsList);
-
-                    Intent intent1 = new Intent(context, MainActivity.class);
-                    intent1.putExtra(MainActivity.DATA_FAV, Constants.DATABASE_FAVORITES);
-                    PendingIntent startPendingIntentActivity = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setPendingIntentTemplate(R.id.appwidget_listView, startPendingIntentActivity);
-                    appWidgetManager.updateAppWidget(appWidgetID, remoteViews);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
 
     }
 
@@ -104,6 +73,15 @@ public class FavoritesWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        if (intent.getAction().equals(ACTION_TEST_TOAST)) {
+            Toast.makeText(context, "TOAST", Toast.LENGTH_SHORT).show();
+        }
+        super.onReceive(context, intent);
     }
 }
 

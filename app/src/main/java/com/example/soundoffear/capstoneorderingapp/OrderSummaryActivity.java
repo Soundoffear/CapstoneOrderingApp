@@ -1,8 +1,11 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -27,6 +30,7 @@ import com.example.soundoffear.capstoneorderingapp.adapters.FinalSandwichAdapter
 import com.example.soundoffear.capstoneorderingapp.adapters.SidesSummaryAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.databases.CateringOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.DrinksOrderDatabase;
+import com.example.soundoffear.capstoneorderingapp.databases.FavoritesDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.databases.SidesOrderDatabase;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
@@ -36,6 +40,7 @@ import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
 import com.example.soundoffear.capstoneorderingapp.models.SidesModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
 import com.example.soundoffear.capstoneorderingapp.utilities.PointsSystemClass;
+import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
@@ -113,7 +118,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("Order Summary");
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -264,7 +269,11 @@ public class OrderSummaryActivity extends AppCompatActivity {
                 countDrinks = 0;
                 countSubs = 0;
                 countSides = 0;
+                insertToFavDB(finalSandwichModelList.get(0).getSandwich());
+
+                updateWidget();
                 if (FavoritesFragment.isAddingFav) {
+
                     databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -280,10 +289,9 @@ public class OrderSummaryActivity extends AppCompatActivity {
                             }
 
                             databaseReference.child(Constants.DATABASE_USERS).child(userID).child("favorites").child(favoriteName).setValue(finalSandwichModelList.get(0));
-                            Toast.makeText(getApplicationContext(), "Item added to Favorites", Toast.LENGTH_SHORT).show();
-
-
+                            Toast.makeText(getApplicationContext(), R.string.item_added_to_fav, Toast.LENGTH_SHORT).show();
                             Intent intentToStartMainActivity = new Intent(OrderSummaryActivity.this, MainActivity.class);
+                            intentToStartMainActivity.putExtra(MainActivity.DATA_FAV, Constants.DATABASE_FAVORITES);
                             startActivity(intentToStartMainActivity);
 
                         }
@@ -383,7 +391,21 @@ public class OrderSummaryActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     sharedPreferences.edit().putString(LAST_ORDER_SAVED, orderNumber).apply();
                 }
+
             }
         });
+    }
+
+    private void updateWidget() {
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, FavoritesWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.appwidget_listView);
+    }
+
+    private void insertToFavDB(String favoriteName) {
+        FavoritesDatabase favoritesDatabase = new FavoritesDatabase(getApplicationContext());
+        favoritesDatabase.insertToFavoritesDB(favoriteName);
     }
 }

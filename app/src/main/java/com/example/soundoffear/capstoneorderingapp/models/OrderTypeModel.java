@@ -2,8 +2,9 @@ package com.example.soundoffear.capstoneorderingapp.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public class OrderTypeModel implements Parcelable {
+public class OrderTypeModel implements Parcelable, Comparable<OrderTypeModel> {
 
     private String orderType;
 
@@ -65,5 +66,14 @@ public class OrderTypeModel implements Parcelable {
 
         OrderTypeModel orderTypeModel = (OrderTypeModel) obj;
         return orderTypeModel.getOrderType().equals(this.getOrderType());
+    }
+
+    @Override
+    public int compareTo(@NonNull OrderTypeModel o) {
+        int r = this.orderType.compareToIgnoreCase(o.getOrderType());
+        if(r == 0) {
+            return 0;
+        }
+        return r;
     }
 }

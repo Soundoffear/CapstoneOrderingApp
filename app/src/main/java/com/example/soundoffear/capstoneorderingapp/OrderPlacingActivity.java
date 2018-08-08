@@ -150,7 +150,7 @@ public class OrderPlacingActivity extends AppCompatActivity {
         setSupportActionBar(orderPlacingToolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(R.string.placing_order);
 
         Intent intentWithCarriers = getIntent();
@@ -175,12 +175,18 @@ public class OrderPlacingActivity extends AppCompatActivity {
         } else {
 
             if (isOrderingAdditionalSandwich || FavoritesFragment.isAddingFav) {
+                Log.d("Sandwiches", "Sandwiches");
                 initializeFragment = new CarrierChooserFragment();
             } else if (isOrderingAdditionalSides) {
+                Log.d("Sides", "Sides");
                 initializeFragment = new SidesFragment();
+                isOrderingAdditionalSides = false;
             } else if (isOrderingAdditionalCatering) {
+                Log.d("Catering", "Catering");
                 initializeFragment = new CateringFragments();
+                isOrderingAdditionalCatering = false;
             } else {
+                Log.d("Normal", "Normal");
                 initializeFragment = new OrderTypesFragment();
             }
 

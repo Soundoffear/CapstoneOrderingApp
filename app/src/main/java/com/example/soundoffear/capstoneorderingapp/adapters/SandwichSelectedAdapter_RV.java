@@ -64,7 +64,7 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
                 double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
                 holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
             }
-            holder.sandwich_price_currency_tv.setText("PLN");
+            holder.sandwich_price_currency_tv.setText(R.string.pln);
             holder.sandwichModel = sandwichModel;
             holder.setSelected(true);
             sandwichSelected = null;
@@ -83,7 +83,7 @@ public class SandwichSelectedAdapter_RV extends RecyclerView.Adapter<SandwichSel
                 double sandwichPrice = Double.parseDouble(sandwichModelList.get(position).getSandwichPrice());
                 holder.sandwich_price_tv.setText(new DecimalFormat("#.00").format(sandwichPrice));
             }
-            holder.sandwich_price_currency_tv.setText("PLN");
+            holder.sandwich_price_currency_tv.setText(R.string.pln);
             holder.sandwichModel = sandwichModelList.get(position);
             holder.setSelected(holder.sandwichModel.isSelected());
         }

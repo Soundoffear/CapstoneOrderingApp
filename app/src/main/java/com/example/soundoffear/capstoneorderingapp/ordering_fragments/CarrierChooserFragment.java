@@ -51,7 +51,8 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
         Bundle bundle = getArguments();
         assert bundle != null;
 
-        if(FavoritesFragment.isAddingFav) {
+        if(FavoritesFragment.isAddingFav || OrderPlacingActivity.isOrderingAdditionalSandwich) {
+            OrderPlacingActivity.isOrderingAdditionalSandwich = false;
             Log.d("TEST", "TESTING FAVS");
             typesList = new ArrayList<>();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -79,6 +80,7 @@ public class CarrierChooserFragment extends Fragment implements OnCarrierSelecte
             });
 
         } else {
+            Log.d("GOING HERE", "GOING HERE");
             typesList = bundle.getParcelableArrayList(OrderPlacingActivity.SANDWICH_CARRIERS);
             SandwichCarrierAdapter_RV sandwichCarrierAdapter_rv = new SandwichCarrierAdapter_RV(getContext(),
                     typesList, CarrierChooserFragment.this, false, selectedCarrier);

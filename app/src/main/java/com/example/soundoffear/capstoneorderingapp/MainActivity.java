@@ -1,5 +1,7 @@
 package com.example.soundoffear.capstoneorderingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 
+import com.example.soundoffear.capstoneorderingapp.databases.FavoritesDatabase;
 import com.example.soundoffear.capstoneorderingapp.fragments.CouponsAndPromosFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.DeliveryAddressEntryFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.FavoritesFragment;
@@ -23,8 +27,10 @@ import com.example.soundoffear.capstoneorderingapp.fragments.OrderStatusFragment
 import com.example.soundoffear.capstoneorderingapp.fragments.RedeemRewardsFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.SettingsFragment;
 import com.example.soundoffear.capstoneorderingapp.fragments.UserDataOutputFragment;
+import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
 import com.example.soundoffear.capstoneorderingapp.models.UserDataModel;
 import com.example.soundoffear.capstoneorderingapp.utilities.Constants;
+import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +67,17 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.nav_drawer_layout);
+        Log.d("TEST TEST TEST", "===============================================");
+
+        FavoritesDatabase favoritesDatabase = new FavoritesDatabase(getApplicationContext());
+        favoritesDatabase.deleteAll();
+
+        if(FavoritesFragment.isAddingFav) {
+            FavoritesFragment.isAddingFav = false;
+        } else {
+            updateFavorites();
+        }
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -210,6 +227,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void updateFavorites() {
+        Log.d("Update DB", "update database" + ";;;;;;4;;4;4;4;4;;42;34;23;2;35;23;;23;tw;;f;sg;w;egw;");
+        final FavoritesDatabase favoritesDatabase = new FavoritesDatabase(getApplicationContext());
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.DATABASE_USERS).child(userID).child(Constants.DATABASE_FAVORITES);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null) {
+                    Map<String, Object> favMap = (Map<String, Object>) dataSnapshot.getValue();
+
+                    for(Map.Entry<String, Object> favData: favMap.entrySet()) {
+                        Log.d("KEY ???", favData.getKey());
+                        Map<String, Object> finalSandwichModel = (Map<String, Object>) favData.getValue();
+                        favoritesDatabase.insertToFavoritesDB(finalSandwichModel.get("sandwich").toString());
+                        Log.d("Instert to DB", "inserting to DB: " + finalSandwichModel.get("sandwich").toString());
+                    }
+
+                    updateWidget();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        updateWidget();
+    }
+
+    private void updateWidget() {
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, FavoritesWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.appwidget_listView);
     }
 
     void setSelectedNavDrawerItem(int id) {

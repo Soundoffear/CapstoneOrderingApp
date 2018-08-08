@@ -15,7 +15,11 @@ import com.example.soundoffear.capstoneorderingapp.adapters.OrderTypeAdapter_RV;
 import com.example.soundoffear.capstoneorderingapp.interfaces.OnOrderTypeSelectedListener;
 import com.example.soundoffear.capstoneorderingapp.models.OrderTypeModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,10 +41,16 @@ public class OrderTypesFragment extends Fragment implements OnOrderTypeSelectedL
         Bundle orderTypesBundle = getArguments();
         assert orderTypesBundle != null;
         orderTypeModelList = orderTypesBundle.getParcelableArrayList(MainPageFragment.LIST_OF_ORDER_TYPES);
+        assert orderTypeModelList != null;
+        TreeSet<OrderTypeModel> orderTypeModelTreeSet = new TreeSet<>();
+        for(OrderTypeModel orderTypeModel: orderTypeModelList) {
+            orderTypeModelTreeSet.add(orderTypeModel);
+        }
+        List<OrderTypeModel> orderTypeModels = new ArrayList<>(orderTypeModelTreeSet);
         order_type_recyclerView.setHasFixedSize(true);
         GridLayoutManager linearLayoutManager = new GridLayoutManager(getContext(), 2);
         order_type_recyclerView.setLayoutManager(linearLayoutManager);
-        OrderTypeAdapter_RV orderTypeAdapter_rv = new OrderTypeAdapter_RV(getContext(), orderTypeModelList, this, false);
+        OrderTypeAdapter_RV orderTypeAdapter_rv = new OrderTypeAdapter_RV(getContext(), orderTypeModels, this, false);
         order_type_recyclerView.setAdapter(orderTypeAdapter_rv);
 
         return view;

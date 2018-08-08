@@ -1,5 +1,7 @@
 package com.example.soundoffear.capstoneorderingapp.adapters;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,8 +16,10 @@ import android.widget.TextView;
 import com.example.soundoffear.capstoneorderingapp.OrderSummaryActivity;
 import com.example.soundoffear.capstoneorderingapp.R;
 import com.example.soundoffear.capstoneorderingapp.contracts.BuildSandwichContract;
+import com.example.soundoffear.capstoneorderingapp.databases.FavoritesDatabase;
 import com.example.soundoffear.capstoneorderingapp.databases.FinalSandwichDataBase;
 import com.example.soundoffear.capstoneorderingapp.models.FinalSandwichModel;
+import com.example.soundoffear.capstoneorderingapp.widget.FavoritesWidget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,6 +92,12 @@ public class FavoritesAdapter_RecyclerView extends RecyclerView.Adapter<Favorite
             @Override
             public void onClick(View v) {
                 Log.d("Selected Item", finalSandwichModelList.get(holder.getAdapterPosition()).getFavNumber());
+                FavoritesDatabase favoritesDatabase = new FavoritesDatabase(fContext);
+                List<String> stringList = favoritesDatabase.getAllFavValues();
+                Log.d("TEST DB ID", stringList.get(position) + " P:" + position + " H:" + holder.getAdapterPosition() + " L:" + holder.getLayoutPosition() + " S:" + stringList.size() );
+                favoritesDatabase.deleteItem((holder.getAdapterPosition() + 1));
+                stringList = favoritesDatabase.getAllFavValues();
+                Log.d("TEST 2", stringList.get(position) + position + " " + stringList.size());
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 databaseReference.child("users").child(userID).child("favorites").child(finalSandwichModelList.get(holder.getAdapterPosition()).getFavNumber()).removeValue();
@@ -96,6 +106,13 @@ public class FavoritesAdapter_RecyclerView extends RecyclerView.Adapter<Favorite
                 finalSandwichModelList.remove(holder.getLayoutPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
                 notifyItemRangeChanged(holder.getAdapterPosition(), finalSandwichModelList.size());
+
+                favoritesDatabase.deleteAll();
+                for(int i = 0; i < finalSandwichModelList.size(); i++) {
+                    favoritesDatabase.insertToFavoritesDB(finalSandwichModelList.get(i).getSandwich());
+                }
+
+                updateWidget();
             }
         });
 
@@ -200,6 +217,14 @@ public class FavoritesAdapter_RecyclerView extends RecyclerView.Adapter<Favorite
             }
         });
 
+    }
+
+    private void updateWidget() {
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(fContext);
+
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(fContext, FavoritesWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.appwidget_listView);
     }
 
 }

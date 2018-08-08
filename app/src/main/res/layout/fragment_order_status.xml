@@ -87,6 +87,7 @@
         android:id="@+id/order_status_order_circle"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:contentDescription="@string/circular_object"
         android:src="@drawable/circular_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

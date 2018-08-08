@@ -91,4 +91,8 @@
     <string name="user_exists">User exists</string>
     <string name="con_av">Connection Available</string>
     <string name="con_not_av">Connection not Available</string>
+    <string name="circular_object">circular object</string>
+    <string name="welcome">WELCOME</string>
+    <string name="no_favs_added">No Favorites Added</string>
+    <string name="item_added_to_fav">Item added to Favorites</string>
 </resources>

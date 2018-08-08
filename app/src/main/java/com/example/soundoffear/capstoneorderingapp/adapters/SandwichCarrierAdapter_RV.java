@@ -43,8 +43,6 @@ public class SandwichCarrierAdapter_RV extends RecyclerView.Adapter<SandwichCarr
     public void onBindViewHolder(@NonNull SandwichCarrier_ViewHolder holder, final int position) {
         CarrierModel carrierModel = carriersList.get(position);
 
-        Log.d("SELECTED CARRIER", ":" + carrierModel.getCarrierName().equals(selectedNameCarrier));
-        Log.d("SEL CAR", "---===" + selectedNameCarrier);
         if (carrierModel.getCarrierName().equals(selectedNameCarrier)) {
             holder.carrier_tv.setText(carrierModel.getCarrierName());
             holder.carrierModel = carrierModel;

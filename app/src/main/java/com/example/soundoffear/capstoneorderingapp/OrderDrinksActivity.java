@@ -53,7 +53,7 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
         setSupportActionBar(order_drinks_toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("Drink Orders");
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -74,11 +74,11 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
 
                 assert drinks != null;
                 //first will get all families of drinks available
-                for(Map.Entry<String, Object> drinkType: drinks.entrySet()) {
+                for (Map.Entry<String, Object> drinkType : drinks.entrySet()) {
                     DrinksModel drinksModel = new DrinksModel(DrinksModel.FAMILY_TYPE, drinkType.getKey(), null);
                     drinkTypes.add(drinksModel);
                     Log.d("TEST", drinkType.getKey());
-                    if(!drinkType.getKey().equals("softdrinks")) {
+                    if (!drinkType.getKey().equals("softdrinks")) {
                         // this loop will get all drinks besides softdrinks and their prices
                         for (Map.Entry<String, Double> drinkT : ((Map<String, Double>) drinkType.getValue()).entrySet()) {
                             DrinksModel drinksModel1 = new DrinksModel(DrinksModel.DRINK_TYPE, drinkT.getKey(), String.valueOf(drinkT.getValue()));
@@ -87,12 +87,12 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
                         }
                     } else {
                         // this loop will get us families of families inside softdrinks
-                        for(Map.Entry<String, Object> drinkSoft: ((Map<String, Object>) drinkType.getValue()).entrySet()) {
+                        for (Map.Entry<String, Object> drinkSoft : ((Map<String, Object>) drinkType.getValue()).entrySet()) {
                             DrinksModel drinksModelSoftDrinkFamily = new DrinksModel(DrinksModel.FAMILY_TYPE, drinkSoft.getKey(), null);
                             drinkTypes.add(drinksModelSoftDrinkFamily);
                             Log.d("Family of Family", drinkSoft.getKey());
                             // this will loop inside softdrinks families
-                            for(Map.Entry<String, Double> softDrinks: ((Map<String, Double>) drinkSoft.getValue()).entrySet()) {
+                            for (Map.Entry<String, Double> softDrinks : ((Map<String, Double>) drinkSoft.getValue()).entrySet()) {
                                 DrinksModel softDrinksModel = new DrinksModel(DrinksModel.DRINK_TYPE, softDrinks.getKey(), String.valueOf(softDrinks.getValue()));
                                 drinkTypes.add(softDrinksModel);
                                 Log.d("Softdrinks", softDrinks.getKey() + " " + softDrinks.getValue());
@@ -117,7 +117,7 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
         order_drinks_send_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i = 0; i < drinks_list.size(); i++) {
+                for (int i = 0; i < drinks_list.size(); i++) {
                     drinksOrderDatabase.insertDrinksDatatoDatabase(drinks_list.get(i));
                 }
                 Intent intent = new Intent(OrderDrinksActivity.this, OrderSummaryActivity.class);
@@ -131,16 +131,16 @@ public class OrderDrinksActivity extends AppCompatActivity implements OnDrinksSe
     public void onDrinksSelected(DrinksModel drinksModel, int value) {
 
         Log.d("DRINK_SEND", drinksModel.getName() + " " + drinksModel.getPrice() + " " + value);
-        for(int i = 0; i < drinks_list.size(); i++) {
-            if(drinks_list.get(i).getName().equals(drinksModel.getName())) {
+        for (int i = 0; i < drinks_list.size(); i++) {
+            if (drinks_list.get(i).getName().equals(drinksModel.getName())) {
                 drinks_list.remove(drinks_list.get(i));
             }
         }
-        if(value > 0) {
+        if (value > 0) {
             DrinksModel drinksM = new DrinksModel(drinksModel.getType(), drinksModel.getName(), drinksModel.getPrice(), String.valueOf(value));
             drinks_list.add(drinksM);
         }
-        for(int i = 0; i < drinks_list.size();i++) {
+        for (int i = 0; i < drinks_list.size(); i++) {
             Log.d("DRINKS TEST", drinks_list.get(i).getName() + " " + drinks_list.get(i).getPrice() + " " + drinks_list.get(i).getValue());
         }
     }
