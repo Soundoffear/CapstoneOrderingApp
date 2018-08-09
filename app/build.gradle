@@ -5,7 +5,7 @@ android {
         release {
             keyAlias 'Soundoffear'
             keyPassword 'Qazxc1231'
-            storeFile file('../keystore')
+            storeFile file('../app/keystore')
             storePassword 'Qazxc1231'
         }
     }
@@ -23,9 +23,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
             signingConfig signingConfigs.release
         }
     }

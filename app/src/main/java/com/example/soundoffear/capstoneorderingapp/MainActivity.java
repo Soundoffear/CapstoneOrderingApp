@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
+    // method to update favorites widget in order to make sure latest data is being loaded
     private void updateFavorites() {
         Log.d("Update DB", "update database" + ";;;;;;4;;4;4;4;4;;42;34;23;2;35;23;;23;tw;;f;sg;w;egw;");
         final FavoritesDatabase favoritesDatabase = new FavoritesDatabase(getApplicationContext());
